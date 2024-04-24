@@ -41,7 +41,7 @@ namespace Project1
         {
             _spriteBatch    = new SpriteBatch(GraphicsDevice);
 
-            ballTexture = Content.Load<Texture2D>("ball");
+            ballTexture = Content.Load<Texture2D>("perla");
         }
 
         protected override void Update(GameTime gameTime)
