@@ -13,6 +13,8 @@ namespace Project1
         private Effect customEffect;
         private Effect inters;
 
+        Texture2D ballTexture;
+
         EffectParameter colorTintParameter;
         VertexBuffer vertexBuffer;
         Vector4 colorTint; // Blanco inicial
@@ -46,6 +48,8 @@ namespace Project1
             _spriteBatch    = new SpriteBatch(GraphicsDevice);
             customEffect    = Content.Load<Effect>("Blue");
             inters          = Content.Load<Effect>("Inter");
+
+            ballTexture = Content.Load<Texture2D>("ball");
 
             //// Obtener el parámetro del color del efecto
             colorTintParameter  = customEffect.Parameters["ColorTint"];
@@ -95,6 +99,11 @@ namespace Project1
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            // Ball
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(ballTexture, new Vector2(0, 0), Color.White);
+            _spriteBatch.End();
 
             customEffect.Parameters["ColorTint"].SetValue(colorTint);
 
