@@ -11,7 +11,9 @@ namespace Project1
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        Texture2D ballTexture;
+        Texture2D ballTexture; // Ball
+        Vector2 ballPosition; // Position
+        float ballSpeed; // Speed
 
         public Game1()
         {
@@ -32,7 +34,9 @@ namespace Project1
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            ballPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,
+            _graphics.PreferredBackBufferHeight / 2);
+            ballSpeed = 100f;
 
             base.Initialize();
         }
@@ -49,6 +53,28 @@ namespace Project1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            var kstate = Keyboard.GetState();
+
+            if (kstate.IsKeyDown(Keys.Up))
+            {
+                ballPosition.Y -= ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            if (kstate.IsKeyDown(Keys.Down))
+            {
+                ballPosition.Y += ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            if (kstate.IsKeyDown(Keys.Left))
+            {
+                ballPosition.X -= ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            if (kstate.IsKeyDown(Keys.Right))
+            {
+                ballPosition.X += ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
             base.Update(gameTime);
         }
 
@@ -58,7 +84,10 @@ namespace Project1
 
             // Ball
             _spriteBatch.Begin();
-            _spriteBatch.Draw(ballTexture, new Vector2(0, 0), Color.White);
+            _spriteBatch.Draw(
+                ballTexture, ballPosition, null, Color.White, 0f, new Vector2(ballTexture.Width / 2, ballTexture.Height / 2),
+                Vector2.One, SpriteEffects.None, 0f
+            );
             _spriteBatch.End();
 
             base.Draw(gameTime);
