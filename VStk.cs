@@ -1,4 +1,4 @@
-﻿// Status: Pending changes for the DrawLine
+﻿// Status: Completed. Check the logic for the DrawLine
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System;
@@ -16,18 +16,19 @@ namespace Project1
         public V2 dxy, offset;
         public float stiff, damp, length, tot, m1, m2, dis, diff;
 
-        public Vstk(VptBase a, VptBase b)
+        public VStk(VptBase a, VptBase b)
         {
             this.a = a;
             this.b = b;
             stiff = 20f;
             damp = 0.05f;
-            length = Vector2.Distance(a.Pos.ToVector2(), b.Pos.ToVector2());
+            length = Vector2.Distance(new Vector2(a.Pos.X, a.Pos.Y), new Vector2(b.Pos.X, b.Pos.Y));
             color = Color.SaddleBrown;
             tot = a.mass + b.mass;
             m1 = b.mass / tot;
             m2 = a.mass / tot;
         }
+
 
 
         public void Update()
