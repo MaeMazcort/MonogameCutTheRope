@@ -44,7 +44,8 @@ namespace Project1
         protected override void LoadContent()
         {
             _spriteBatch    = new SpriteBatch(GraphicsDevice);
-
+            SpriteBatchExtensions.Initialize(GraphicsDevice);
+            
             ballTexture = Content.Load<Texture2D>("perla");
         }
 
