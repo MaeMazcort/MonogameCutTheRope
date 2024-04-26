@@ -26,5 +26,10 @@ namespace Project1
 
             spriteBatch.Draw(pixel, start, null, color, angle, Vector2.Zero, new Vector2(edge.Length(), width), SpriteEffects.None, 0);
         }
+
+        public static void FillEllipse(this SpriteBatch spriteBatch, Color color, Rectangle destRect)
+        {
+            spriteBatch.Draw(pixel, destRect, color);
+        }
     }
 }
