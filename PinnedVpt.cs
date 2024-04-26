@@ -1,6 +1,7 @@
 ﻿// Status: Completed. Check the Render function
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Project1
 {
@@ -17,20 +18,34 @@ namespace Project1
         public bool Available { get; set; }
 
 
-        public void RenderRadius(SpriteBatch spriteBatch, Texture2D pixelTexture)
+        public void RenderRadius(SpriteBatch spriteBatch)
         {
             // Only draw the radius if Available = true
             if (Available)
             {
-                Color color = Color.CornflowerBlue * 0.5f; // Adjust alpha to control transparency
+                Color color = Color.CornflowerBlue; // Adjust alpha to control transparency
+                int segments = 20; // Number of segments for the dashed line
+                float segmentAngle = MathHelper.TwoPi / segments;
 
-                // Calculate the top-left corner of the bounding rectangle for the circle
-                Vector2 topLeft = new Vector2(Pos.X - Radius, Pos.Y - Radius);
-                Rectangle boundingRect = new Rectangle((int)topLeft.X, (int)topLeft.Y, Radius * 2, Radius * 2);
+                for (int i = 0; i < segments; i += 2)
+                {
+                    // Calculate the angle for this segment
+                    float startAngle = i * segmentAngle;
+                    float endAngle = (i + 1) * segmentAngle;
 
-                // Draw the dashed circle using a custom pixel texture
-                spriteBatch.Draw(pixelTexture, boundingRect, null, color, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+                    // Calculate the start and end points for this segment
+                    Vector2 startPoint = new Vector2(Pos.X + Radius * (float)Math.Cos(startAngle), Pos.Y + Radius * (float)Math.Sin(startAngle));
+                    Vector2 endPoint = new Vector2(Pos.X + Radius * (float)Math.Cos(endAngle), Pos.Y + Radius * (float)Math.Sin(endAngle));
+
+                    // Calculate the bounding rectangle for this segment
+                    Rectangle boundingRect = new Rectangle((int)Math.Min(startPoint.X, endPoint.X), (int)Math.Min(startPoint.Y, endPoint.Y), (int)Math.Abs(startPoint.X - endPoint.X), (int)Math.Abs(startPoint.Y - endPoint.Y));
+
+                    // Draw the ellipse
+                    spriteBatch.FillEllipse(color, boundingRect);
+                }
             }
         }
+
+
     }
 }
