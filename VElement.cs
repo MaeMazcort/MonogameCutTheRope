@@ -19,7 +19,7 @@ namespace Project1
         public List<CandyVpt> cndPts;
         public List<PinnedVpt> pndPts;
         public List<VRope> rps;
-        public List<Vstk> stks;
+        public List<VStk> stks;
         public List<Star> strs;
 
         public Map map { get; set; }
@@ -27,12 +27,12 @@ namespace Project1
         public VElement()
         {
             pts = new List<VptBase>();
-            stks = new List<Vstk>();
+            stks = new List<VStk>();
             strtPts = new List<StartVpt>();
             cndPts = new List<CandyVpt>();
             pndPts = new List<PinnedVpt>();
             rps = new List<VRope>();
-            stks = new List<Vstk>();
+            stks = new List<VStk>();
             strs = new List<Star>();
         }
 
