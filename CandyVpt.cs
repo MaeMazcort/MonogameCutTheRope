@@ -21,7 +21,7 @@ namespace Project1
             Texture = texture;
         }
 
-        public void Update(Size space)
+        public void Update(Rectangle space)
         {
             base.Update(space);
         }

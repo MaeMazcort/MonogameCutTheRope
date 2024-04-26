@@ -51,7 +51,7 @@ namespace Project1
             }
         }
 
-        public void Update(Size space)
+        public void Update(Rectangle space)
         {
             if (!IsPinned)
             {
@@ -69,7 +69,7 @@ namespace Project1
             }
         }
 
-        public void Constraints(Size space)
+        public void Constraints(Rectangle space)
         {
             if (Pos.X > space.Width - r) Pos.X = space.Width - r;
 
