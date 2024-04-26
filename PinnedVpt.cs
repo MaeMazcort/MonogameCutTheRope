@@ -11,7 +11,6 @@ namespace Project1
             Radius = radius;
             Available = available;
             Level = level;
-
         }
 
         public int Radius { get; set; }
