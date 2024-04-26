@@ -1,7 +1,8 @@
 ﻿// Status: Uncompleted
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System.Runtime.CompilerServices;
 using System.Linq;
 using System.Text;
