@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Project1
 {
-    internal class V2
+    public class V2
     {
         public float X, Y;
 

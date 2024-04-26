@@ -10,7 +10,7 @@ using System.Reflection.Emit;
 
 namespace Project1
 {
-    internal class VptBase
+    public class VptBase
     {
         public V2 axis, normal, res;
         // public SolidBrush brush;
