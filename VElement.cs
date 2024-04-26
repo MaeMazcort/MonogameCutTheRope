@@ -1,13 +1,15 @@
-﻿// Status: Uncompleted. Check Render function
+﻿// Status: Completed. Check Render function and the cirle
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using Microsoft.Xna.Framework;
 using System.Linq;
 using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+using System.Reflection.Metadata;
+using Microsoft.Xna.Framework.Content;
 
 namespace Project1
 {
@@ -47,7 +49,7 @@ namespace Project1
         public Texture2D Texture { get; set; } // Unused?
         public int clamState;
 
-        public void SetClam(PointF position, Texture2D texture)
+        public void SetClam(Vector2 position, Texture2D texture)
         {
             clam = new Clam(position.X, position.Y, texture);
             clamState = 1;
@@ -92,11 +94,13 @@ namespace Project1
         }
 
 
-        public void Render(Graphics g, Size space, int currentLevel)
+        public void Render(SpriteBatch spriteBatch, Rectangle space, int currentLevel, Texture2D perlaTexture, Texture2D estrellaTexture, Texture2D almejaTexture)
         {
+            // Update points
             for (p = 0; p < pts.Count; p++)
                 pts[p].Update(space);
 
+            // Perform iterations
             for (l = 0; l < 5; l++)
             {
                 for (p = 0; p < stks.Count; p++)
@@ -109,53 +113,59 @@ namespace Project1
                     pts[p].Constraints(space);
             }
 
+            // Render points
             for (p = 0; p < pts.Count; p++)
             {
                 if (pts[p].Level == currentLevel && !(pts[p] is CandyVpt))
                 {
-                    pts[p].Render(g, space, pts);
+                    pts[p].Render(spriteBatch, space, pts);
                 }
             }
 
+            // Render pearls
             for (p = 0; p < cndPts.Count; p++)
             {
                 if (cndPts[p].Level == currentLevel)
                 {
-                    g.DrawImage(Resources.perla, cndPts[p].Pos.X - 10, cndPts[p].Pos.Y - 10, map.nTileWidth, map.nTileHeight);
+                    spriteBatch.Draw(perlaTexture, new Vector2(cndPts[p].Pos.X - 10, cndPts[p].Pos.Y - 10), Color.White);
                 }
             }
 
-
+            // Render ropes
             for (p = 0; p < rps.Count; p++)
             {
                 if (rps[p].Level == currentLevel)
                 {
-                    rps[p].Render(g, space);
+                    rps[p].Render(spriteBatch, space);
                 }
             }
 
+            // Render pinnedPoints
             for (p = 0; p < pndPts.Count; p++)
             {
                 if (pndPts[p].Level == currentLevel)
                 {
-                    pndPts[p].RenderRadius(g);
+                    pndPts[p].RenderRadius(spriteBatch);
 
                 }
             }
 
-
+            // Render stars
             for (int i = 0; i < strs.Count; i++)
             {
                 if (strs[i].Level == currentLevel)
                 {
-                    g.DrawImage(Resources.estrella, strs[i].Position.X - 10, strs[i].Position.Y - 10, map.nTileWidth, map.nTileHeight);
+                    spriteBatch.Draw(estrellaTexture, new Vector2(strs[i].Position.X - 10, strs[i].Position.Y - 10), Color.White);
                 }
             }
 
+            // Render clam
             if (clamState == 1)
             {
-                g.DrawImage(Resources.almeja1, clam.Position.X - 20, clam.Position.Y - 30, map.nTileWidth * 3, map.nTileHeight * 3);
+                spriteBatch.Draw(almejaTexture, new Vector2(clam.Position.X - 20, clam.Position.Y - 30), null, Color.White, 0f, Vector2.Zero, new Vector2(3, 3), SpriteEffects.None, 0f);
             }
         }
+
+
     }
 }
