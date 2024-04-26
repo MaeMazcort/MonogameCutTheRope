@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using Microsoft.Xna.Framework;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,13 +12,13 @@ namespace Project1
 {
     public class Clam
     {
-        public PointF Position { get; set; }
+        public Vector2 Position { get; set; }
         public Texture2D Texture { get; set; }
 
 
         public Clam(float x, float y, Texture2D texture)
         {
-            Position = new PointF(x, y);
+            Position = new Vector2(x, y);
             Texture = texture;
         }
 
@@ -33,7 +33,7 @@ namespace Project1
 
         public bool AteCandy(CandyVpt candy)
         {
-            float distance = Distance(Position, new PointF(candy.Pos.X, candy.Pos.Y));
+            float distance = Distance(Position, new Vector2(candy.Pos.X, candy.Pos.Y));
             if (distance < 25)
             {
                 return true;
@@ -42,7 +42,7 @@ namespace Project1
             return false;
         }
 
-        private float Distance(PointF point1, PointF point2)
+        private float Distance(Vector2 point1, Vector2 point2)
         {
             return (float)Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
         }
