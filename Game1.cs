@@ -4,7 +4,10 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using System.Timers;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Project1
 {
@@ -14,6 +17,9 @@ namespace Project1
             private SpriteBatch _spriteBatch;
 
             Texture2D ballTexture; // Ball
+            Texture2D pearlTexture;
+            Texture2D clamTexture;
+            Texture2D starTexture;
             Vector2 ballPosition; // Position
             float ballSpeed; // Speed
 
@@ -132,7 +138,7 @@ namespace Project1
         }
 
 
-        protected override void Initialize()
+            protected override void Initialize()
             {
                 ballPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,
                 _graphics.PreferredBackBufferHeight / 2);
@@ -143,10 +149,13 @@ namespace Project1
 
             protected override void LoadContent()
             {
-                _spriteBatch    = new SpriteBatch(GraphicsDevice);
+                _spriteBatch = new SpriteBatch(GraphicsDevice);
                 SpriteBatchExtensions.Initialize(GraphicsDevice);
-            
+
                 ballTexture = Content.Load<Texture2D>("perla");
+                pearlTexture = Content.Load<Texture2D>("perla");
+                clamTexture = Content.Load<Texture2D>("almeja");
+                starTexture = Content.Load<Texture2D>("estrella");
             }
 
             protected override void Update(GameTime gameTime)
@@ -158,17 +167,55 @@ namespace Project1
 
                 if (mouseState.LeftButton == ButtonState.Pressed && !isMousePressed)
                 {
-                    // El botón izquierdo del mouse se ha presionado
                     isMousePressed = true;
                     startMousePosition = new Vector2(mouseState.X, mouseState.Y);
                 }
                 else if (mouseState.LeftButton == ButtonState.Released && isMousePressed)
                 {
-                    // El botón izquierdo del mouse se ha soltado
                     isMousePressed = false;
                 }
 
-                base.Update(gameTime);
+                // Replacement for the 3 mouse functions
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    // Obtener la posición actual del mouse
+                    Point currentPoint = new Point(mouseState.X, mouseState.Y);
+
+                    if (!isMousePressed)
+                    {
+                        isMousePressed = true;
+                        slicePoints.Add(currentPoint); // Agregar el punto de inicio
+                    }
+                    else
+                    {
+                        // Si ya se ha presionado el botón del mouse, agregar el punto solo si no está duplicado
+                        if (!slicePoints.Contains(currentPoint))
+                        {
+                            slicePoints.Add(currentPoint);
+                            if (slicePoints.Count > 1)
+                            {
+                                // Lógica para detectar intersecciones
+                                IntersectionDetection(scene.Elements[0].rps, slicePoints);
+                            }
+
+                            if (slicePoints.Count > 100) // Control de la longitud de la línea
+                            {
+                                slicePoints.RemoveAt(0); // Si excede el límite, eliminar el primer punto agregado
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Si el botón del mouse se ha soltado, limpiar los puntos y restablecer el estado
+                    if (isMousePressed)
+                    {
+                        isMousePressed = false;
+                        slicePoints.Clear();
+                    }
+                }
+
+            base.Update(gameTime);
             }
 
             protected override void Draw(GameTime gameTime)
@@ -200,5 +247,164 @@ namespace Project1
             {
                 allowRendering = true;
             }
+
+            private float GetCurrentTimeInSeconds()
+            {
+                return (float)stopwatch.Elapsed.TotalSeconds;
+            }
+
+            private float easeInOutQuad(float t)
+            {
+                return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+            }
+
+            private void UpdateEnv()
+            {
+
+                if (levelfinished)
+                {
+                    targetPosY += 21.0f; // Set this based on the trigger condition
+                    easingStartTime = GetCurrentTimeInSeconds();
+                }
+
+                if (up)
+                {
+                    targetPosY -= 21.0f; // Set this based on the trigger condition
+                    easingStartTime = GetCurrentTimeInSeconds();
+                }
+
+                if (GetCurrentTimeInSeconds() - easingStartTime < easingDuration)
+                {
+                    float timeFraction = (GetCurrentTimeInSeconds() - easingStartTime) / easingDuration;
+                    fCameraPosY += (easeInOutQuad(timeFraction) * (targetPosY - fCameraPosY));
+                }
+
+                fCameraPosY = Math.Min(fCameraPosY, 48);
+
+                map.Draw(new Vector2(fCameraPosX, fCameraPosY), scene, pearlTexture, starTexture, clamTexture);
+            }
+
+            private Vector2 ConvertScreenToWorld(Point screenPoint)
+            {
+                // Calculate the ratio of the screen coordinates to the control size
+                float xRatio = screenPoint.X / (float)pantallaRect.X;
+                float yRatio = screenPoint.Y / (float)pantallaRect.Y;
+
+                // Use the ratio to calculate the world coordinates
+                float worldX = map.fOffsetX + xRatio * (map.nTileWidth * map.nVisibleTilesX);
+                float worldY = map.fOffsetY + yRatio * (map.nTileHeight * map.nVisibleTilesY);
+
+                return new Vector2(worldX, worldY);
+            }
+
+            private void IntersectionDetection(List<VRope> ropes, List<Point> slicePts)
+            {
+                float intersectionRadius = 15;
+                bool ropeCut = false;
+
+                foreach (var rope in ropes)
+                {
+                    foreach (var slicePoint in slicePts)
+                    {
+                        foreach (var stick in rope.Sticks.ToList()) // Create a copy for safe modification
+                        {
+                            Vector2 worldPoint = ConvertScreenToWorld(slicePoint);
+                            float distance = DistanceBetweenPoints(worldPoint, stick.GetMidpoint());
+                            if (distance <= intersectionRadius)
+                            {
+                                rope.DeleteStick(stick); // Cut the rope
+                                ropeCut = true;
+                                break; // Exit the innermost loop
+                            }
+                        }
+
+                        if (ropeCut)
+                        {
+                            rope.DeleteCutVRope(); // Remove all sticks if one is cut
+                            return; // Exit the method after handling the cut
+                        }
+                    }
+                }
+            }
+
+            private void RadiusIntersectionDetection(List<PinnedVpt> pinnedVpts, List<CandyVpt> candyVpts)
+            {
+                foreach (var pinnedPt in pinnedVpts)
+                {
+                    foreach (var candyPt in candyVpts)
+                    {
+                        if (candyPt.Pos.Distance(pinnedPt.Pos) <= pinnedPt.Radius)
+                        {
+                            if (pinnedPt.Available)
+                            {
+                                VRope rope = new VRope(pinnedPt, candyPt, 6, pinnedPt.Level);
+                                scene.Elements[0].AddRope(rope);
+                                pinnedPt.Available = false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            private float DistanceBetweenPoints(Vector2 point1, Vector2 point2)
+            {
+                // Calculate the Euclidean distance between two points
+                return (float)Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
+            }
+
+            public void ObtainStar()
+            {
+                List<Star> collectedStars = new List<Star>();
+
+                foreach (var star in scene.Elements[0].strs)
+                {
+                    foreach (var candy in scene.Elements[0].cndPts)
+                    {
+                        star.CheckCollision(candy);
+                        if (star.IsCollected)
+                        {
+                            map.score += 10; // Add points when the star is collected
+                            collectedStars.Add(star);
+                        }
+                    }
+
+                }
+
+                // Remove the collected stars from the main list after checking all stars
+                foreach (var collectedStar in collectedStars)
+                {
+                    scene.Elements[0].strs.Remove(collectedStar);
+            }
         }
+    }
+
+
+        public bool LevelChangeDetection(Clam clam)
+        {
+            for (int i = 0; i < scene.Elements[0].cndPts.Count; i++)
+            {
+                if (clam.AteCandy(scene.Elements[0].cndPts[i]))
+                {
+                    map.score += 100;
+                    if (map.currentLevel == 3)
+                    {
+                        GameWon();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Level " + map.currentLevel + " completed!");
+
+                        scene.Elements[0].cndPts.Remove(scene.Elements[0].cndPts[i]);
+                        scene.Elements[0].DeleteClam();
+                        Console.WriteLine("\nLevel " + map.currentLevel + " started!");
+                    }
+                    map.currentLevel++;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+}
 }
