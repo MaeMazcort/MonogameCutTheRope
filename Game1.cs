@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Timers;
 
 namespace Project1
 {
@@ -30,14 +31,16 @@ namespace Project1
             private System.Timers.Timer renderTimer;
             private bool allowRendering = true;
 
+            Rectangle pantallaRect;
+
             // Mouse
             MouseState mouseState;
             Vector2 startMousePosition; // Almacena la posición del mouse cuando se presiona el botón izquierdo
             private bool isMousePressed;
 
 
-        // Camera properties
-        float fCameraPosX = 0.0f;
+            // Camera properties
+            float fCameraPosX = 0.0f;
             float fCameraPosY = 0.0f;
             bool levelfinished, up;
 
@@ -64,6 +67,8 @@ namespace Project1
                 int h   = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
                 int div = 1;
 
+                pantallaRect = new Rectangle(0, 0, w, h);
+
                 _graphics.PreferredBackBufferWidth = w/div;
                 _graphics.PreferredBackBufferHeight = h/div;
                 _graphics.ApplyChanges();
@@ -80,12 +85,54 @@ namespace Project1
                 //PCT_CANVAS.Paint += PCT_Paint;
             }
 
-            public void Init()
-            {
+        private void Init()
+        {
+            scene = new Scene();
+            map = new Map(pantallaRect); // Obtén el tamaño de la ventana del juego
+            map.currentLevel = 1;
+            scene.AddElement(new VElement());
+            scene.Elements[0].SetMap(map);
+            delta = 0;
+            checklevel = 0;
+            r = 0;
+            renderTimer = new System.Timers.Timer();
+            renderTimer.Elapsed += OnRenderTimerElapsed;
+            renderTimer.AutoReset = false;
+            levelfinished = false;
+            up = false;
 
-            }
+            // Parallax
+            //layer1 = Properties.Resources.fondo0;
+            //layer2 = Properties.Resources.burbujasParallax2;
+            //layer3 = Properties.Resources.pecesParallax;
+            //layer4 = Properties.Resources.rocaArriba;
 
-            protected override void Initialize()
+            l1_X1 = l1_X2 = 0;
+            l2_X1 = l2_X2 = 0;
+            l3_X1 = 0;
+            //l3_X2 = layer1.Width; // Tercera imagen justo al final de la primera
+
+            l2_Y1 = 0; // Inicia en la parte inferior de la pantalla
+            l2_Y2 = GraphicsDevice.Viewport.Height; // Segunda imagen justo fuera de la vista arriba
+
+
+        }
+
+        private void BackgroudMove()
+        {
+            l2_Y1 -= motion2;
+            l2_Y2 -= motion2;
+            if (l2_Y1 < -height) { l2_Y1 = height; }
+            if (l2_Y2 < -height) { l2_Y2 = height; }
+
+            l3_X1 -= motion3;
+            l3_X2 -= motion3;
+            if (l3_X1 < -width) { l3_X1 = width; }
+            if (l3_X2 < -width) { l3_X2 = width; }
+        }
+
+
+        protected override void Initialize()
             {
                 ballPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,
                 _graphics.PreferredBackBufferHeight / 2);
@@ -147,6 +194,11 @@ namespace Project1
                 _spriteBatch.End();
 
                 base.Draw(gameTime);
+            }
+
+            private void OnRenderTimerElapsed(object sender, ElapsedEventArgs e)
+            {
+                allowRendering = true;
             }
         }
 }
