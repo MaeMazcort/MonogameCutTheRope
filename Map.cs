@@ -1,7 +1,8 @@
 ﻿// Status: Uncompleted. Check the whole Draw function
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Resources;
 using System.Text;
@@ -83,17 +84,14 @@ namespace Project1
             nLevelWidth = 21;
             nLevelHeight = 42;
 
-            // TODO: Check the Graphics
-            /*
             bmp = new Bitmap(s.Width / divs, s.Height / divs);
 
             g = Graphics.FromImage(bmp);
             g.PixelOffsetMode = PixelOffsetMode.HighSpeed;
             g.SmoothingMode = SmoothingMode.HighSpeed;
-            */
         }
 
-        public void Draw(PointF cameraPos, Scene scene)
+        public void Draw(Vector2 cameraPos, Scene scene, Texture2D perlaTexture, Texture2D estrellaTexture, Texture2D almejaTexture)
         {
             // Draw Level based on the visible tiles on our picturebox (canvas)
             nVisibleTilesX = bmp.Width / nTileWidth;
@@ -129,8 +127,8 @@ namespace Project1
                         {
                             case 'M': //Clam
                                 SetTile(x + (int)fOffsetX, y + (int)fOffsetY, '.');
-                                var clam = new Clam(stepX, stepY, Resources.almeja1);
-                                scene.Elements[0].SetClam(new PointF(stepX, stepY), Resources.almeja1);
+                                var clam = new Clam(stepX, stepY, almejaTexture);
+                                scene.Elements[0].SetClam(new Vector2(stepX, stepY), almejaTexture);
                                 break;
                             case '1': //Start Vpt from Level 1
                                 SetTile(x + (int)fOffsetX, y + (int)fOffsetY, '.');
@@ -141,7 +139,7 @@ namespace Project1
                                 break;
                             case 'S': //Star Level 1
                                 SetTile(x + (int)fOffsetX, y + (int)fOffsetY, '.');
-                                var star1 = new Star(stepX, stepY, level: 1, Resources.estrella);
+                                var star1 = new Star(stepX, stepY, level: 1, estrellaTexture);
                                 scene.Elements[0].AddStar(star1);
                                 //star1.DrawStar(canvas.g);
                                 break;
@@ -154,7 +152,7 @@ namespace Project1
                                 break;
                             case 'A': //Candy Vpt Level 1
                                 SetTile(x + (int)fOffsetX, y + (int)fOffsetY, '.');
-                                var candyVpt1 = new CandyVpt(stepX, stepY, id, level: 1, Resources.perla);
+                                var candyVpt1 = new CandyVpt(stepX, stepY, id, level: 1, perlaTexture);
                                 scene.Elements[0].AddPoint(candyVpt1);
                                 scene.Elements[0].AddCandyPoint(candyVpt1);
                                 //emitter.Particles.Add(candyVpt1);
@@ -162,19 +160,6 @@ namespace Project1
                                 break;
                                 break;
                             case '#':
-                                g.FillRectangle(Brushes.Red, stepX, stepY, nTileWidth, nTileHeight);
-                                g.FillRectangle(Brushes.Black, stepX, stepY, nTileWidth, nTileHeight);
-                                g.FillRectangle(Brushes.DarkRed, stepX + 1, stepY + 1, nTileWidth - 2, nTileHeight - 2);
-                                g.FillEllipse(Brushes.DarkRed, stepX, stepY, nTileWidth, nTileHeight);
-                                g.FillEllipse(Brushes.DarkSlateGray, stepX, stepY, nTileWidth / 2, nTileHeight / 2);
-                                g.DrawLine(Pens.Black, stepX + nTileHeight / 2, stepY + nTileHeight / 2, stepX + nTileHeight, stepY + nTileHeight - 3);
-                                g.DrawLine(Pens.Maroon, stepX + nTileHeight / 2, 2 + stepY + nTileHeight / 2, 1 + stepX + nTileHeight, stepY + nTileHeight - 2);
-                                g.DrawLine(Pens.Black, stepX + nTileHeight / 2, stepY, stepX + nTileHeight / 2, stepY + nTileHeight * 2 / 3);
-                                g.DrawLine(Pens.Black, 1 + stepX + nTileHeight / 2, stepY + 1, 2 + stepX + nTileHeight / 2, 3 + stepY + nTileHeight * 2 / 3);
-                                g.DrawLine(Pens.Maroon, 2 + stepX + nTileHeight / 2, stepY, 1 + stepX + nTileHeight / 2, stepY + nTileHeight * 2 / 3);
-                                g.DrawLine(Pens.Black, stepX + nTileHeight / 2, stepY + nTileHeight * 2 / 3, stepX, stepY + nTileHeight / 3);
-                                g.DrawRectangle(Pens.Black, stepX + nTileHeight / 2, stepY, nTileWidth, nTileHeight - 1);
-                                g.DrawRectangle(Pens.Gray, stepX, stepY, nTileWidth, nTileHeight - 1);
                                 break;
                         }
                     }
@@ -184,7 +169,7 @@ namespace Project1
                         {
                             case 'M': //Clam
                                 SetTile(x + (int)fOffsetX, y + (int)fOffsetY, '.');
-                                scene.Elements[0].SetClam(new PointF(stepX, stepY - 40), Resources.almeja1);
+                                scene.Elements[0].SetClam(new Vector2(stepX, stepY - 40), almejaTexture);
                                 break;
                             case 'P': //Pinned Vpt Level 2
                                 SetTile(x + (int)fOffsetX, y + (int)fOffsetY, '.');
@@ -209,32 +194,19 @@ namespace Project1
                                 break;
                             case 'T': //Star Level 2
                                 SetTile(x + (int)fOffsetX, y + (int)fOffsetY, '.');
-                                var star2 = new Star(stepX, stepY - 100, level: 2, Resources.estrella);
+                                var star2 = new Star(stepX, stepY - 100, level: 2, estrellaTexture);
                                 scene.Elements[0].AddStar(star2);
                                 //star2.DrawStar(canvas.g);
                                 break;
                             case 'B': //Candy Vpt Level 2
                                 SetTile(x + (int)fOffsetX, y + (int)fOffsetY, '.');
-                                var candyVpt2 = new CandyVpt(stepX, stepY - 210, id, level: 2, Resources.perla);
+                                var candyVpt2 = new CandyVpt(stepX, stepY - 210, id, level: 2, perlaTexture);
                                 scene.Elements[0].AddPoint(candyVpt2);
                                 scene.Elements[0].AddCandyPoint(candyVpt2);
                                 //emitter.Particles.Add(candyVpt2);
                                 id++;
                                 break;
                             case '#':
-                                g.FillRectangle(Brushes.Red, stepX, stepY, nTileWidth, nTileHeight);
-                                g.FillRectangle(Brushes.Black, stepX, stepY, nTileWidth, nTileHeight);
-                                g.FillRectangle(Brushes.DarkRed, stepX + 1, stepY + 1, nTileWidth - 2, nTileHeight - 2);
-                                g.FillEllipse(Brushes.DarkRed, stepX, stepY, nTileWidth, nTileHeight);
-                                g.FillEllipse(Brushes.DarkSlateGray, stepX, stepY, nTileWidth / 2, nTileHeight / 2);
-                                g.DrawLine(Pens.Black, stepX + nTileHeight / 2, stepY + nTileHeight / 2, stepX + nTileHeight, stepY + nTileHeight - 3);
-                                g.DrawLine(Pens.Maroon, stepX + nTileHeight / 2, 2 + stepY + nTileHeight / 2, 1 + stepX + nTileHeight, stepY + nTileHeight - 2);
-                                g.DrawLine(Pens.Black, stepX + nTileHeight / 2, stepY, stepX + nTileHeight / 2, stepY + nTileHeight * 2 / 3);
-                                g.DrawLine(Pens.Black, 1 + stepX + nTileHeight / 2, stepY + 1, 2 + stepX + nTileHeight / 2, 3 + stepY + nTileHeight * 2 / 3);
-                                g.DrawLine(Pens.Maroon, 2 + stepX + nTileHeight / 2, stepY, 1 + stepX + nTileHeight / 2, stepY + nTileHeight * 2 / 3);
-                                g.DrawLine(Pens.Black, stepX + nTileHeight / 2, stepY + nTileHeight * 2 / 3, stepX, stepY + nTileHeight / 3);
-                                g.DrawRectangle(Pens.Black, stepX + nTileHeight / 2, stepY, nTileWidth, nTileHeight - 1);
-                                g.DrawRectangle(Pens.Gray, stepX, stepY, nTileWidth, nTileHeight - 1);
                                 break;
                         }
                     }
@@ -251,13 +223,13 @@ namespace Project1
                                 break;
                             case 'U': //Star Level 3
                                 SetTile(x + (int)fOffsetX, y + (int)fOffsetY, '.');
-                                var star3 = new Star(stepX, stepY - 100, level: 3, Resources.estrella);
+                                var star3 = new Star(stepX, stepY - 100, level: 3, estrellaTexture);
                                 scene.Elements[0].AddStar(star3);
                                 //star3.DrawStar(canvas.g);
                                 break;
                             case 'M': //Clam
                                 SetTile(x + (int)fOffsetX, y + (int)fOffsetY, '.');
-                                scene.Elements[0].SetClam(new PointF(stepX, stepY - 40), Resources.almeja1);
+                                scene.Elements[0].SetClam(new Vector2(stepX, stepY - 40), almejaTexture);
                                 break;
                             case 'Q': //Pinned Vpt Level 3
                                 SetTile(x + (int)fOffsetX, y + (int)fOffsetY, '.');
@@ -268,33 +240,13 @@ namespace Project1
                                 break;
                             case 'C': //Candy Vpt Level 3
                                 SetTile(x + (int)fOffsetX, y + (int)fOffsetY, '.');
-                                var candyVpt3 = new CandyVpt(stepX, stepY - 210, id, level: 3, Resources.perla);
+                                var candyVpt3 = new CandyVpt(stepX, stepY - 210, id, level: 3, perlaTexture);
                                 scene.Elements[0].AddPoint(candyVpt3);
                                 scene.Elements[0].AddCandyPoint(candyVpt3);
                                 //emitter.Particles.Add(candyVpt3);
                                 id++;
                                 break;
                             case '#':
-                                g.FillRectangle(Brushes.Red, stepX, stepY, nTileWidth, nTileHeight);
-                                g.FillRectangle(Brushes.Black, stepX, stepY, nTileWidth, nTileHeight);
-                                g.FillRectangle(Brushes.DarkRed, stepX + 1, stepY + 1, nTileWidth - 2, nTileHeight - 2);
-                                g.FillEllipse(Brushes.DarkRed, stepX, stepY, nTileWidth, nTileHeight);
-                                g.FillEllipse(Brushes.DarkSlateGray, stepX, stepY, nTileWidth / 2, nTileHeight / 2);
-                                g.DrawLine(Pens.Black, stepX + nTileHeight / 2, stepY + nTileHeight / 2,
-                                    stepX + nTileHeight, stepY + nTileHeight - 3);
-                                g.DrawLine(Pens.Maroon, stepX + nTileHeight / 2, 2 + stepY + nTileHeight / 2,
-                                    1 + stepX + nTileHeight, stepY + nTileHeight - 2);
-                                g.DrawLine(Pens.Black, stepX + nTileHeight / 2, stepY, stepX + nTileHeight / 2,
-                                    stepY + nTileHeight * 2 / 3);
-                                g.DrawLine(Pens.Black, 1 + stepX + nTileHeight / 2, stepY + 1,
-                                    2 + stepX + nTileHeight / 2, 3 + stepY + nTileHeight * 2 / 3);
-                                g.DrawLine(Pens.Maroon, 2 + stepX + nTileHeight / 2, stepY, 1 + stepX + nTileHeight / 2,
-                                    stepY + nTileHeight * 2 / 3);
-                                g.DrawLine(Pens.Black, stepX + nTileHeight / 2, stepY + nTileHeight * 2 / 3, stepX,
-                                    stepY + nTileHeight / 3);
-                                g.DrawRectangle(Pens.Black, stepX + nTileHeight / 2, stepY, nTileWidth,
-                                    nTileHeight - 1);
-                                g.DrawRectangle(Pens.Gray, stepX, stepY, nTileWidth, nTileHeight - 1);
                                 break;
                         }
                     }
