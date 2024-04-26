@@ -82,7 +82,7 @@ namespace Project1
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-            Init();
+            //Init();
 
             stopwatch.Start();
             //PCT_CANVAS.MouseMove += PCT_MouseMove;
@@ -97,7 +97,9 @@ namespace Project1
             map = new Map(pantallaRect); // Obtén el tamaño de la ventana del juego
             map.currentLevel = 1;
             scene.AddElement(new VElement());
-            scene.Elements[0].SetMap(map);
+            //scene.Elements[0].SetMap(map);
+            var candytemp = new CandyVpt(100, 100, -1,1,pearlTexture);
+            scene.Elements[0].AddPoint(candytemp);
             delta = 0;
             checklevel = 0;
             r = 0;
@@ -143,6 +145,7 @@ namespace Project1
             ballPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,
             _graphics.PreferredBackBufferHeight / 2);
             ballSpeed = 100f;
+            Init();
 
             base.Initialize();
         }
@@ -162,6 +165,8 @@ namespace Project1
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            scene.Elements[0].Update(pantallaRect);
 
             MouseState mouseState = Mouse.GetState();
 
@@ -215,6 +220,33 @@ namespace Project1
                 }
             }
 
+            // Left code
+
+            UpdateEnv();
+            levelfinished = false;
+
+            //Check for intersection between CandyVpt and PinnedVpt radius
+            RadiusIntersectionDetection(scene.Elements[0].pndPts, scene.Elements[0].cndPts);
+
+            levelfinished = LevelChangeDetections(scene.Elements[0].clam);
+            if (levelfinished)
+            {
+                r = 0;
+                // Start the timer to delay rendering
+                renderTimer.Interval = 2000;  // Delay rendering for 2 seconds, adjust as needed
+                renderTimer.Start();
+                allowRendering = false;  // Stop rendering until the timer elapses
+            }
+
+            // Check if the star is collected
+            ObtainStar();
+
+            tick_counter++;
+
+            delta += 0.001f;
+
+            CheckGameState();
+
             base.Update(gameTime);
         }
 
@@ -224,7 +256,12 @@ namespace Project1
 
             // Ball
             _spriteBatch.Begin();
+
             _spriteBatch.Draw(
+                ballTexture, new Rectangle((int)scene.Elements[0].pts[0].Pos.X, (int)scene.Elements[0].pts[0].Pos.Y, 40,40), Color.Aqua
+            );
+
+            /*_spriteBatch.Draw(
                 ballTexture, ballPosition, null, Color.White, 0f, new Vector2(ballTexture.Width / 2, ballTexture.Height / 2),
                 Vector2.One, SpriteEffects.None, 0f
             );
@@ -238,6 +275,31 @@ namespace Project1
                 // Dibujar la línea
                 _spriteBatch.DrawLine(startMousePosition, currentMousePosition, Color.White);
             }
+
+            if (allowRendering)
+            {
+                scene.Render(_spriteBatch, pantallaRect, checklevel, pearlTexture, starTexture, clamTexture);  // Render only if allowed
+                if (r == 0)
+                {
+                    if (scene.Elements[0].cndPts.Count > 0)
+                    {
+                        for (int i = 0; i < scene.Elements[0].cndPts.Count; i++)
+                        {
+                            for (int j = 0; j < scene.Elements[0].strtPts.Count; j++)
+                            {
+                                if (scene.Elements[0].strtPts[j].Level == scene.Elements[0].cndPts[i].Level)
+                                {
+                                    VRope rope = new VRope(scene.Elements[0].strtPts[j], scene.Elements[0].cndPts[i], 6,
+                                    scene.Elements[0].strtPts[j].Level);
+                                    scene.Elements[0].AddRope(rope);
+                                }
+                            }
+                        }
+                    }
+                    r++;
+                }
+            }*/
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
@@ -260,7 +322,6 @@ namespace Project1
 
         private void UpdateEnv()
         {
-
             if (levelfinished)
             {
                 targetPosY += 21.0f; // Set this based on the trigger condition
@@ -431,7 +492,7 @@ namespace Project1
                 //GameOver();
             }
         }
-        
+
         /*
         public void GameOver()
         {

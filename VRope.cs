@@ -45,6 +45,16 @@ namespace Project1
                 Sticks.Add(new VStk(Points.Last(), endVpt));
             }
         }
+        public void Update(Rectangle space) {
+            // Render each stick
+            foreach (var stick in Sticks)
+                stick.Update();
+
+            // Render each point
+            foreach (var point in Points)
+                point.Update(space);
+
+        }
 
         public void Render(SpriteBatch spriteBatch, Rectangle space)
         {
@@ -54,7 +64,7 @@ namespace Project1
 
             // Render each point
             foreach (var point in Points)
-                point.Render(spriteBatch, space, Points);
+                point.Render(spriteBatch);
         }
 
         public void DeleteStick(VStk stick)

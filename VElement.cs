@@ -93,8 +93,7 @@ namespace Project1
             strs.Add(str);
         }
 
-
-        public void Render(SpriteBatch spriteBatch, Rectangle space, int currentLevel, Texture2D perlaTexture, Texture2D estrellaTexture, Texture2D almejaTexture)
+        public void Update(Rectangle space)
         {
             // Update points
             for (p = 0; p < pts.Count; p++)
@@ -107,18 +106,41 @@ namespace Project1
                     stks[p].Update();
 
                 for (p = 0; p < pts.Count; p++)
-                    pts[p].DetectCollision(pts);
+                    //pts[p].DetectCollision(pts);
 
                 for (p = 0; p < pts.Count; p++)
                     pts[p].Constraints(space);
             }
+            //Update points
+            for (p = 0; p < pts.Count; p++)
+            {
+                if (pts[p].Level == 1 && !(pts[p] is CandyVpt))
+                {
+                    pts[p].Update2(space, pts);
+                }
+            }
+            // Update ropes
+            for (p = 0; p < rps.Count; p++)
+            {
+                if (rps[p].Level == 1)
+                {
+                    rps[p].Update(space);
+                }
+            }
+        }
+
+
+
+        public void Render(SpriteBatch spriteBatch, Rectangle space, int currentLevel, Texture2D perlaTexture, Texture2D estrellaTexture, Texture2D almejaTexture)
+        {
+
 
             // Render points
             for (p = 0; p < pts.Count; p++)
             {
                 if (pts[p].Level == currentLevel && !(pts[p] is CandyVpt))
                 {
-                    pts[p].Render(spriteBatch, space, pts);
+                    pts[p].Render(spriteBatch);
                 }
             }
 

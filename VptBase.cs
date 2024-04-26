@@ -118,12 +118,13 @@ namespace Project1
                 }
             }
         }
-
-        public void Render(SpriteBatch spriteBatch, Rectangle space, List<VptBase> pts)
-        {
+        public void Update2(Rectangle space, List<VptBase> pts) {
             Update(space);
-            DetectCollision(pts);
+            //DetectCollision(pts);
             Constraints(space);
+        }
+        public void Render(SpriteBatch spriteBatch)
+        {
             Rectangle destRect = new Rectangle((int)(Pos.X - r), (int)(Pos.Y - r), (int)d, (int)d);
             spriteBatch.FillEllipse(Color.White, destRect);
         }
