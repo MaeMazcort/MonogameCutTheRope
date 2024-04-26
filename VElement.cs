@@ -177,14 +177,14 @@ namespace Project1
             {
                 if (strs[i].Level == currentLevel)
                 {
-                    spriteBatch.Draw(estrellaTexture, new Vector2(strs[i].Position.X - 10, strs[i].Position.Y - 10), Color.White);
+                    spriteBatch.Draw(estrellaTexture, new Rectangle((int)(strs[i].Position.X - 10), (int)(strs[i].Position.Y - 10), 40, 40), Color.White);
                 }
             }
 
             // Render clam
             if (clamState == 1)
             {
-                spriteBatch.Draw(almejaTexture, new Vector2(clam.Position.X - 20, clam.Position.Y - 30), null, Color.White, 0f, Vector2.Zero, new Vector2(3, 3), SpriteEffects.None, 0f);
+                spriteBatch.Draw(almejaTexture, new Rectangle((int)(clam.Position.X - 20), (int)(clam.Position.Y - 30),40,40), Color.White);
             }
         }
 

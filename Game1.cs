@@ -64,13 +64,16 @@ namespace Project1
 
         // Bitmap layer1, layer2, layer3, layer4; // Check for the parallax
 
+        int VWWIDTH, VWHEIGHT;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             _graphics.IsFullScreen = true;
 
             int w = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            VWWIDTH = w;
             int h = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            VWHEIGHT = h;
             int div = 1;
 
             pantallaRect = new Rectangle(0, 0, w, h);
@@ -95,14 +98,16 @@ namespace Project1
         {
             scene = new Scene();
             map = new Map(pantallaRect); // Obtén el tamaño de la ventana del juego
-            map.currentLevel = 1;
+            map.currentLevel = 2;
             scene.AddElement(new VElement());
-            //scene.Elements[0].SetMap(map);
-            var candytemp = new CandyVpt(100, 100, 1,1,pearlTexture);
-            scene.Elements[0].AddPoint(candytemp);
-            var startVpt1 = new StartVpt(200, 50, 2, level: 1);
+            scene.Elements[0].SetMap(map);
+            map.Draw(new Vector2(fCameraPosX, fCameraPosY), scene, pearlTexture, starTexture, clamTexture);
+
+            /*var startVpt1 = new StartVpt(VWWIDTH/2, 50, 2, level: 1);
             scene.Elements[0].AddPoint(startVpt1);
             scene.Elements[0].AddStartPoint(startVpt1);
+            var candytemp = new CandyVpt(VWWIDTH / 2, 200, 1,1,pearlTexture);
+            scene.Elements[0].AddPoint(candytemp);*/
             delta = 0;
             checklevel = 0;
             r = 0;
@@ -260,13 +265,16 @@ namespace Project1
             // Ball
             _spriteBatch.Begin();
 
-            /*_spriteBatch.Draw(
-                ballTexture, new Rectangle((int)scene.Elements[0].pts[0].Pos.X, (int)scene.Elements[0].pts[0].Pos.Y, 40,40), Color.Aqua
+            for (int i = 0; i < scene.Elements[0].pts.Count; i++) {
+                _spriteBatch.Draw(
+                ballTexture, new Rectangle((int)scene.Elements[0].pts[i].Pos.X, (int)scene.Elements[0].pts[i].Pos.Y, 40, 40), Color.Aqua
             );
 
+            }
+
             _spriteBatch.Draw(
-            ballTexture, new Rectangle((int)scene.Elements[0].pts[1].Pos.X, (int)scene.Elements[0].pts[1].Pos.Y, 40, 40), Color.Aqua
-            );*/
+            clamTexture, new Rectangle((int)scene.Elements[0].clam.Position.X, (int)scene.Elements[0].clam.Position.Y, 40, 40), Color.Aqua
+            );
 
             /*_spriteBatch.Draw(
                 ballTexture, ballPosition, null, Color.White, 0f, new Vector2(ballTexture.Width / 2, ballTexture.Height / 2),
@@ -349,7 +357,7 @@ namespace Project1
 
             fCameraPosY = Math.Min(fCameraPosY, 48);
 
-            map.Draw(new Vector2(fCameraPosX, fCameraPosY), scene, pearlTexture, starTexture, clamTexture);
+           // map.Draw(new Vector2(fCameraPosX, fCameraPosY), scene, pearlTexture, starTexture, clamTexture);
         }
 
         private Vector2 ConvertScreenToWorld(Point screenPoint)
