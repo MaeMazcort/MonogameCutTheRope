@@ -97,7 +97,7 @@ namespace Project1
         {
             // Update points
             for (p = 0; p < pts.Count; p++)
-                pts[p].Update(space);
+                pts[p].Update2(space, pts);
 
             // Perform iterations
             for (l = 0; l < 5; l++)
@@ -106,7 +106,7 @@ namespace Project1
                     stks[p].Update();
 
                 for (p = 0; p < pts.Count; p++)
-                    //pts[p].DetectCollision(pts);
+                    pts[p].DetectCollision(pts);
 
                 for (p = 0; p < pts.Count; p++)
                     pts[p].Constraints(space);

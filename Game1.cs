@@ -98,8 +98,11 @@ namespace Project1
             map.currentLevel = 1;
             scene.AddElement(new VElement());
             //scene.Elements[0].SetMap(map);
-            var candytemp = new CandyVpt(100, 100, -1,1,pearlTexture);
+            var candytemp = new CandyVpt(100, 100, 1,1,pearlTexture);
             scene.Elements[0].AddPoint(candytemp);
+            var startVpt1 = new StartVpt(200, 50, 2, level: 1);
+            scene.Elements[0].AddPoint(startVpt1);
+            scene.Elements[0].AddStartPoint(startVpt1);
             delta = 0;
             checklevel = 0;
             r = 0;
@@ -257,9 +260,13 @@ namespace Project1
             // Ball
             _spriteBatch.Begin();
 
-            _spriteBatch.Draw(
+            /*_spriteBatch.Draw(
                 ballTexture, new Rectangle((int)scene.Elements[0].pts[0].Pos.X, (int)scene.Elements[0].pts[0].Pos.Y, 40,40), Color.Aqua
             );
+
+            _spriteBatch.Draw(
+            ballTexture, new Rectangle((int)scene.Elements[0].pts[1].Pos.X, (int)scene.Elements[0].pts[1].Pos.Y, 40, 40), Color.Aqua
+            );*/
 
             /*_spriteBatch.Draw(
                 ballTexture, ballPosition, null, Color.White, 0f, new Vector2(ballTexture.Width / 2, ballTexture.Height / 2),

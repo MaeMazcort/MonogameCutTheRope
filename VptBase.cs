@@ -120,7 +120,7 @@ namespace Project1
         }
         public void Update2(Rectangle space, List<VptBase> pts) {
             Update(space);
-            //DetectCollision(pts);
+            DetectCollision(pts);
             Constraints(space);
         }
         public void Render(SpriteBatch spriteBatch)
