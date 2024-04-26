@@ -1,4 +1,4 @@
-﻿// Status: Uncompleted. Check the whole Draw function
+﻿// Status: Completed. Check the missing bmp and g
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System;
@@ -83,19 +83,13 @@ namespace Project1
 
             nLevelWidth = 21;
             nLevelHeight = 42;
-
-            bmp = new Bitmap(s.Width / divs, s.Height / divs);
-
-            g = Graphics.FromImage(bmp);
-            g.PixelOffsetMode = PixelOffsetMode.HighSpeed;
-            g.SmoothingMode = SmoothingMode.HighSpeed;
         }
 
         public void Draw(Vector2 cameraPos, Scene scene, Texture2D perlaTexture, Texture2D estrellaTexture, Texture2D almejaTexture)
         {
             // Draw Level based on the visible tiles on our picturebox (canvas)
-            nVisibleTilesX = bmp.Width / nTileWidth;
-            nVisibleTilesY = bmp.Height / nTileHeight;
+            nVisibleTilesX = s.Width / nTileWidth;
+            nVisibleTilesY = s.Height / nTileHeight;
 
             // Calculate Top-Leftmost visible tile
             fOffsetX = cameraPos.X - (float)nVisibleTilesX / 2.0f;
@@ -110,7 +104,7 @@ namespace Project1
             float fTileOffsetX = (fOffsetX - (int)fOffsetX) * nTileWidth;
             float fTileOffsetY = (fOffsetY - (int)fOffsetY) * nTileHeight;
 
-            //Draw visible tile map//*--------------------DRAW------------------------------
+            //Draw visible tile map
             char c;
             for (int x = -1; x < nVisibleTilesX + 2; x++)
             {
@@ -253,10 +247,11 @@ namespace Project1
                 }
             }
 
-            g.DrawString("SCORE:: " + score, new Font("Consolas", 10, FontStyle.Italic), Brushes.White, 5, 5);
+            // TODO: Change for the equivalent
+            //g.DrawString("SCORE:: " + score, new Font("Consolas", 10, FontStyle.Italic), Brushes.White, 5, 5);
         }
 
-        public void SetTile(float x, float y, char c)//changes the tile
+        public void SetTile(float x, float y, char c)
         {
             if (x >= 0 && x < nLevelWidth && y >= 0 && y < nLevelHeight)
             {
