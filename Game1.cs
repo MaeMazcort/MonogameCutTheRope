@@ -98,7 +98,7 @@ namespace Project1
         {
             scene = new Scene();
             map = new Map(pantallaRect); // Obtén el tamaño de la ventana del juego
-            map.currentLevel = 2;
+            map.currentLevel = 3;
             scene.AddElement(new VElement());
             scene.Elements[0].SetMap(map);
             map.Draw(new Vector2(fCameraPosX, fCameraPosY), scene, pearlTexture, starTexture, clamTexture);
