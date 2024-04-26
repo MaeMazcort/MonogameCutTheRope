@@ -1,4 +1,4 @@
-﻿// Status: Uncompleted
+﻿// Status: Completed. Check the logic for FillEllipse
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -119,15 +119,13 @@ namespace Project1
             }
         }
 
-        // TODO: Fix Graphics and FillEllipse
-        /*
-        public void Render(Graphics g, Size space, List<VptBase> pts)
+        public void Render(SpriteBatch spriteBatch, Rectangle space, List<VptBase> pts)
         {
             Update(space);
             DetectCollision(pts);
             Constraints(space);
-            g.FillEllipse(brush, Pos.X - r, Pos.Y - r, d, d);
+            Rectangle destRect = new Rectangle((int)(Pos.X - r), (int)(Pos.Y - r), (int)d, (int)d);
+            spriteBatch.FillEllipse(Color.White, destRect);
         }
-        */
     }
 }
