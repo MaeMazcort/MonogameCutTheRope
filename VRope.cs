@@ -13,14 +13,14 @@ namespace Project1
     {
         private int numPoints;
         public List<VptBase> Points;
-        public List<Vstk> Sticks;
+        public List<VStk> Sticks;
         public int Level { get; set; }
 
         public VRope(VptBase startVpt, VptBase endVpt, int numPoints, int level)
         {
             this.numPoints = numPoints;
             Points = new List<VptBase>();
-            Sticks = new List<Vstk>();
+            Sticks = new List<VStk>();
             Level = level;
 
             // Create points along the rope, excluding the actual start and end positions for the rope
@@ -34,15 +34,15 @@ namespace Project1
             // Create sticks between consecutive rope points
             for (var i = 0; i < Points.Count - 1; i++)
             {
-                Sticks.Add(new Vstk(Points[i], Points[i + 1]));
+                Sticks.Add(new VStk(Points[i], Points[i + 1]));
             }
 
             // Connect the startVpt to the first rope point and endVpt to the last rope point with sticks.
             // Check if there are points in the rope to connect.
             if (Points.Any())
             {
-                Sticks.Add(new Vstk(startVpt, Points.First()));
-                Sticks.Add(new Vstk(Points.Last(), endVpt));
+                Sticks.Add(new VStk(startVpt, Points.First()));
+                Sticks.Add(new VStk(Points.Last(), endVpt));
             }
         }
 
@@ -57,7 +57,7 @@ namespace Project1
                 point.Render(spriteBatch, space, Points);
         }
 
-        public void DeleteStick(Vstk stick)
+        public void DeleteStick(VStk stick)
         {
             Sticks.Remove(stick);
         }
