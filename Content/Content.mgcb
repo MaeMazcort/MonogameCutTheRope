@@ -55,6 +55,18 @@
 /processorParam:TextureFormat=Color
 /build:burbujasParallax.png
 
+#begin burbujasParallax.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:burbujasParallax.png
+
 #begin estrella.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -66,6 +78,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:estrella.png
+
+#begin fondo0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:fondo0.png
 
 #begin fondo0.png
 /importer:TextureImporter
@@ -97,6 +121,18 @@
 /processorParam:TextureFormat=Color
 /build:pecesParallax.png
 
+#begin pecesParallax.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:pecesParallax.png
+
 #begin perla.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -108,6 +144,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:perla.png
+
+#begin rocaArriba.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:rocaArriba.png
 
 #begin rocaArriba.png
 /importer:TextureImporter
