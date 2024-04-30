@@ -181,7 +181,7 @@ namespace Project1
             for (int p = 0; p < scene.Elements[0].pts.Count; p++)
             {
                 if (scene.Elements[0].pts[p].Level == map.currentLevel && !(scene.Elements[0].pts[p] is CandyVpt))
-                    scene.Elements[0].pts[p].Render(_spriteBatch);
+                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)scene.Elements[0].pts[p].Pos.X - 15, (int)scene.Elements[0].pts[p].Pos.Y - 15, 30, 30), Color.White);
             }
 
             // Render pearl
