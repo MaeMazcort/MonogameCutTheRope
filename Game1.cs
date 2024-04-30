@@ -169,6 +169,13 @@ namespace Project1
             // Show elements on the map
             _spriteBatch.Begin();
 
+            // Render ropes
+            for (int p = 0; p < scene.Elements[0].rps.Count; p++)
+            {
+                if (scene.Elements[0].rps[p].Level == map.currentLevel)
+                    scene.Elements[0].rps[p].Render(_spriteBatch, pantallaRect);
+            }
+
             // Render points
             // TODO: Change the content
             for (int p = 0; p < scene.Elements[0].pts.Count; p++)
@@ -182,13 +189,6 @@ namespace Project1
             {
                 if (scene.Elements[0].cndPts[p].Level == map.currentLevel)
                     _spriteBatch.Draw(pearlTexture, new Rectangle((int)scene.Elements[0].pts[p].Pos.X, (int)scene.Elements[0].pts[p].Pos.Y, 40, 40), Color.White);
-            }
-
-            // Render ropes
-            for (int p = 0; p < scene.Elements[0].rps.Count; p++)
-            {
-                if (scene.Elements[0].rps[p].Level == map.currentLevel)
-                    scene.Elements[0].rps[p].Render(_spriteBatch, pantallaRect);
             }
 
             // Render pinnedPoints
