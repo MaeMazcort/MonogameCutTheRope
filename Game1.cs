@@ -166,13 +166,29 @@ namespace Project1
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // Ball
+            // Show elements on the map
             _spriteBatch.Begin();
 
-            for (int i = 0; i < scene.Elements[0].pts.Count; i++) {
-                _spriteBatch.Draw(
-                pearlTexture, new Rectangle((int)scene.Elements[0].pts[i].Pos.X, (int)scene.Elements[0].pts[i].Pos.Y, 40, 40), Color.White
-            );
+            // Render points
+            // TODO: Change the content
+            for (int p = 0; p < scene.Elements[0].pts.Count; p++)
+            {
+                if (scene.Elements[0].pts[p].Level == map.currentLevel && !(scene.Elements[0].pts[p] is CandyVpt))
+                    scene.Elements[0].pts[p].Render(_spriteBatch);
+            }
+
+            // Render pearl
+            for (int p = 0; p < scene.Elements[0].cndPts.Count; p++)
+            {
+                if (scene.Elements[0].cndPts[p].Level == map.currentLevel)
+                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)scene.Elements[0].pts[p].Pos.X, (int)scene.Elements[0].pts[p].Pos.Y, 40, 40), Color.White);
+            }
+
+            // Render ropes
+            for (int p = 0; p < scene.Elements[0].rps.Count; p++)
+            {
+                if (scene.Elements[0].rps[p].Level == map.currentLevel)
+                    scene.Elements[0].rps[p].Render(_spriteBatch, pantallaRect);
             }
 
             // Render stars
@@ -181,15 +197,8 @@ namespace Project1
                 _spriteBatch.Draw(starTexture, new Rectangle((int)(scene.Elements[0].strs[i].Position.X - 10), (int)(scene.Elements[0].strs[i].Position.Y - 10), 40, 40), Color.White);
             }
 
-            // Render ropes
-            for (int p = 0; p < scene.Elements[0].rps.Count; p++)
-            {
-                scene.Elements[0].rps[p].Render(_spriteBatch, pantallaRect);
-            }
-
             // Render clam
             _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 20), (int)(clam.Position.Y - 30), 40, 40), Color.White);
-           
 
             //scene.Elements[0].Render(_spriteBatch, pantallaRect, checklevel, pearlTexture, starTexture, clamTexture);
 
