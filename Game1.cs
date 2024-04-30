@@ -33,7 +33,7 @@ namespace Project1
 
         public float delta;
         public Scene scene;
-        //private List<Point> slicePoints = new List<Point>();
+        private List<Vector2> slicePoints = new List<Vector2>();
         private Stopwatch stopwatch = new Stopwatch();
         //private Point mouseStart, mouseEnd;
         private int checklevel;
@@ -51,21 +51,14 @@ namespace Project1
         Vector2 startMousePosition; // Almacena la posición del mouse cuando se presiona el botón izquierdo
         private bool isMousePressed;
 
-
-        // Camera properties
-        float fCameraPosX = 0.0f;
-        float fCameraPosY = 0.0f;
         bool levelfinished, up;
-        int VWWIDTH, VWHEIGHT;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             _graphics.IsFullScreen = true;
 
             int w = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            VWWIDTH = w;
             int h = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            VWHEIGHT = h;
             int div = 1;
 
             //pantallaRect = new Rectangle(0, 0, w, h);
@@ -98,11 +91,6 @@ namespace Project1
             map = new Map(pantallaRect, ref candy, ref elements, ref clam, scene, pearlTexture, starTexture, clamTexture);
             map.currentLevel = 1;
 
-            /*var startVpt1 = new StartVpt(VWWIDTH/2, 50, 2, level: 1);
-            scene.Elements[0].AddPoint(startVpt1);
-            scene.Elements[0].AddStartPoint(startVpt1);
-            var candytemp = new CandyVpt(VWWIDTH / 2, 200, 1,1,pearlTexture);
-            scene.Elements[0].AddPoint(candytemp);*/
             delta = 0;
             checklevel = 0;
             r = 0;
@@ -132,7 +120,7 @@ namespace Project1
             SpriteBatchExtensions.Initialize(GraphicsDevice);
 
             ballTexture = Content.Load<Texture2D>("perla");
-            pearlTexture = Content.Load<Texture2D>("perla");
+            pearlTexture = Content.Load<Texture2D>("ball");
             clamTexture = Content.Load<Texture2D>("almeja");
             starTexture = Content.Load<Texture2D>("estrella");
         }
@@ -157,8 +145,6 @@ namespace Project1
             }
 
             // Left code
-
-            UpdateEnv();
             levelfinished = false;
 
             //Check for intersection between CandyVpt and PinnedVpt radius
@@ -195,30 +181,20 @@ namespace Project1
 
             for (int i = 0; i < scene.Elements[0].pts.Count; i++) {
                 _spriteBatch.Draw(
-                ballTexture, new Rectangle((int)scene.Elements[0].pts[i].Pos.X, (int)scene.Elements[0].pts[i].Pos.Y, 40, 40), Color.Aqua
+                ballTexture, new Rectangle((int)scene.Elements[0].pts[i].Pos.X, (int)scene.Elements[0].pts[i].Pos.Y, 40, 40), Color.White
             );
 
             }
 
-            _spriteBatch.Draw(
-            clamTexture, new Rectangle((int)scene.Elements[0].clam.Position.X, (int)scene.Elements[0].clam.Position.Y, 40, 40), Color.Aqua
-            );
 
-            /*_spriteBatch.Draw(
-                ballTexture, ballPosition, null, Color.White, 0f, new Vector2(ballTexture.Width / 2, ballTexture.Height / 2),
-                Vector2.One, SpriteEffects.None, 0f
-            );
-
+            // Draw a line in the cut
             if (isMousePressed)
             {
-                // Dibujar una línea desde startMousePosition hasta la posición actual del mouse
                 MouseState mouseState = Mouse.GetState();
                 Vector2 currentMousePosition = new Vector2(mouseState.X, mouseState.Y);
-
-                // Dibujar la línea
                 _spriteBatch.DrawLine(startMousePosition, currentMousePosition, Color.White);
             }
-
+ 
             if (allowRendering)
             {
                 scene.Render(_spriteBatch, pantallaRect, checklevel, pearlTexture, starTexture, clamTexture);  // Render only if allowed
@@ -241,13 +217,12 @@ namespace Project1
                     }
                     r++;
                 }
-            }*/
+            }
 
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
-
         private void OnRenderTimerElapsed(object sender, ElapsedEventArgs e)
         {
             allowRendering = true;
@@ -262,34 +237,8 @@ namespace Project1
         {
             return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
         }
-
-        private void UpdateEnv()
-        {
-            if (levelfinished)
-            {
-                targetPosY += 21.0f; // Set this based on the trigger condition
-                easingStartTime = GetCurrentTimeInSeconds();
-            }
-
-            if (up)
-            {
-                targetPosY -= 21.0f; // Set this based on the trigger condition
-                easingStartTime = GetCurrentTimeInSeconds();
-            }
-
-            if (GetCurrentTimeInSeconds() - easingStartTime < easingDuration)
-            {
-                float timeFraction = (GetCurrentTimeInSeconds() - easingStartTime) / easingDuration;
-                fCameraPosY += (easeInOutQuad(timeFraction) * (targetPosY - fCameraPosY));
-            }
-
-            fCameraPosY = Math.Min(fCameraPosY, 48);
-
-            // map.Draw(new Vector2(fCameraPosX, fCameraPosY), scene, pearlTexture, starTexture, clamTexture);
-        }
-
-        /*
-        private Vector2 ConvertScreenToWorld(Point screenPoint)
+        
+        private Vector2 ConvertScreenToWorld(Vector2 screenPoint)
         {
             // Calculate the ratio of the screen coordinates to the control size
             float xRatio = screenPoint.X / (float)pantallaRect.X;
@@ -302,8 +251,8 @@ namespace Project1
             return new Vector2(worldX, worldY);
         }
 
-        /*
-        private void IntersectionDetection(List<VRope> ropes, List<Point> slicePts)
+        
+        private void IntersectionDetection(List<VRope> ropes, List<Vector2> slicePts)
         {
             float intersectionRadius = 15;
             bool ropeCut = false;
@@ -331,7 +280,7 @@ namespace Project1
                     }
                 }
             }
-        }*/
+        }
 
         private void RadiusIntersectionDetection(List<PinnedVpt> pinnedVpts, List<CandyVpt> candyVpts)
         {
