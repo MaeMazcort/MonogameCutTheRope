@@ -4,8 +4,11 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
+using Color = Microsoft.Xna.Framework.Color;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using System.Timers;
 using static System.Formats.Asn1.AsnWriter;
 
@@ -23,12 +26,16 @@ namespace Project1
         Vector2 ballPosition; // Position
         float ballSpeed; // Speed
 
-        Map map;
+        public Map map;
+        CandyVpt candy;
+        VElement elements;
+        Clam clam;
+
         public float delta;
         public Scene scene;
-        private List<Point> slicePoints = new List<Point>();
+        //private List<Point> slicePoints = new List<Point>();
         private Stopwatch stopwatch = new Stopwatch();
-        private Point mouseStart, mouseEnd;
+        //private Point mouseStart, mouseEnd;
         private int checklevel;
         public int r, tick_counter = 0;
         private float targetPosY;
@@ -49,21 +56,6 @@ namespace Project1
         float fCameraPosX = 0.0f;
         float fCameraPosY = 0.0f;
         bool levelfinished, up;
-
-        //Parallax
-        int motion1 = 1;
-        int motion2 = 4;
-        int motion3 = 8;
-
-        int width = 300;
-        int height = 220;
-
-        int l1_X1, l1_X2, l2_X1, l2_X2, l3_X1, l3_X2, l4_X1, l4_X2;
-        int l2_Y1, l2_Y2;
-        // static Graphics g; // Check for the parallax
-
-        // Bitmap layer1, layer2, layer3, layer4; // Check for the parallax
-
         int VWWIDTH, VWHEIGHT;
         public Game1()
         {
@@ -76,7 +68,7 @@ namespace Project1
             VWHEIGHT = h;
             int div = 1;
 
-            pantallaRect = new Rectangle(0, 0, w, h);
+            //pantallaRect = new Rectangle(0, 0, w, h);
 
             _graphics.PreferredBackBufferWidth = w / div;
             _graphics.PreferredBackBufferHeight = h / div;
@@ -97,11 +89,14 @@ namespace Project1
         private void Init()
         {
             scene = new Scene();
-            map = new Map(pantallaRect); // Obtén el tamaño de la ventana del juego
-            map.currentLevel = 3;
             scene.AddElement(new VElement());
             scene.Elements[0].SetMap(map);
-            map.Draw(new Vector2(fCameraPosX, fCameraPosY), scene, pearlTexture, starTexture, clamTexture);
+            //map.Draw(new Vector2(fCameraPosX, fCameraPosY), scene, pearlTexture, starTexture, clamTexture);
+            pantallaRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height);
+
+            map = new Map(pantallaRect, ref candy, ref elements, ref clam, scene, pearlTexture, starTexture, clamTexture);
+            map.currentLevel = 1;
 
             /*var startVpt1 = new StartVpt(VWWIDTH/2, 50, 2, level: 1);
             scene.Elements[0].AddPoint(startVpt1);
@@ -117,34 +112,6 @@ namespace Project1
             levelfinished = false;
             up = false;
 
-            // Parallax
-            //layer1 = Properties.Resources.fondo0;
-            //layer2 = Properties.Resources.burbujasParallax2;
-            //layer3 = Properties.Resources.pecesParallax;
-            //layer4 = Properties.Resources.rocaArriba;
-
-            l1_X1 = l1_X2 = 0;
-            l2_X1 = l2_X2 = 0;
-            l3_X1 = 0;
-            //l3_X2 = layer1.Width; // Tercera imagen justo al final de la primera
-
-            l2_Y1 = 0; // Inicia en la parte inferior de la pantalla
-            l2_Y2 = GraphicsDevice.Viewport.Height; // Segunda imagen justo fuera de la vista arriba
-
-
-        }
-
-        private void BackgroudMove()
-        {
-            l2_Y1 -= motion2;
-            l2_Y2 -= motion2;
-            if (l2_Y1 < -height) { l2_Y1 = height; }
-            if (l2_Y2 < -height) { l2_Y2 = height; }
-
-            l3_X1 -= motion3;
-            l3_X2 -= motion3;
-            if (l3_X1 < -width) { l3_X1 = width; }
-            if (l3_X2 < -width) { l3_X2 = width; }
         }
 
 
@@ -153,6 +120,7 @@ namespace Project1
             ballPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,
             _graphics.PreferredBackBufferHeight / 2);
             ballSpeed = 100f;
+
             Init();
 
             base.Initialize();
@@ -186,46 +154,6 @@ namespace Project1
             else if (mouseState.LeftButton == ButtonState.Released && isMousePressed)
             {
                 isMousePressed = false;
-            }
-
-            // Replacement for the 3 mouse functions
-            if (mouseState.LeftButton == ButtonState.Pressed)
-            {
-                // Obtener la posición actual del mouse
-                Point currentPoint = new Point(mouseState.X, mouseState.Y);
-
-                if (!isMousePressed)
-                {
-                    isMousePressed = true;
-                    slicePoints.Add(currentPoint); // Agregar el punto de inicio
-                }
-                else
-                {
-                    // Si ya se ha presionado el botón del mouse, agregar el punto solo si no está duplicado
-                    if (!slicePoints.Contains(currentPoint))
-                    {
-                        slicePoints.Add(currentPoint);
-                        if (slicePoints.Count > 1)
-                        {
-                            // Lógica para detectar intersecciones
-                            IntersectionDetection(scene.Elements[0].rps, slicePoints);
-                        }
-
-                        if (slicePoints.Count > 100) // Control de la longitud de la línea
-                        {
-                            slicePoints.RemoveAt(0); // Si excede el límite, eliminar el primer punto agregado
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // Si el botón del mouse se ha soltado, limpiar los puntos y restablecer el estado
-                if (isMousePressed)
-                {
-                    isMousePressed = false;
-                    slicePoints.Clear();
-                }
             }
 
             // Left code
@@ -357,9 +285,10 @@ namespace Project1
 
             fCameraPosY = Math.Min(fCameraPosY, 48);
 
-           // map.Draw(new Vector2(fCameraPosX, fCameraPosY), scene, pearlTexture, starTexture, clamTexture);
+            // map.Draw(new Vector2(fCameraPosX, fCameraPosY), scene, pearlTexture, starTexture, clamTexture);
         }
 
+        /*
         private Vector2 ConvertScreenToWorld(Point screenPoint)
         {
             // Calculate the ratio of the screen coordinates to the control size
@@ -373,6 +302,7 @@ namespace Project1
             return new Vector2(worldX, worldY);
         }
 
+        /*
         private void IntersectionDetection(List<VRope> ropes, List<Point> slicePts)
         {
             float intersectionRadius = 15;
@@ -401,7 +331,7 @@ namespace Project1
                     }
                 }
             }
-        }
+        }*/
 
         private void RadiusIntersectionDetection(List<PinnedVpt> pinnedVpts, List<CandyVpt> candyVpts)
         {
