@@ -188,7 +188,7 @@ namespace Project1
             for (int p = 0; p < scene.Elements[0].cndPts.Count; p++)
             {
                 if (scene.Elements[0].cndPts[p].Level == map.currentLevel)
-                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)scene.Elements[0].pts[p].Pos.X, (int)scene.Elements[0].pts[p].Pos.Y, 40, 40), Color.White);
+                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)scene.Elements[0].pts[p].Pos.X - 20, (int)scene.Elements[0].pts[p].Pos.Y - 20, 40, 40), Color.White);
             }
 
             // Render pinnedPoints
@@ -202,11 +202,11 @@ namespace Project1
             for (int i = 0; i < scene.Elements[0].strs.Count; i++)
             {
                 if (scene.Elements[0].strs[i].Level == map.currentLevel)
-                    _spriteBatch.Draw(starTexture, new Rectangle((int)(scene.Elements[0].strs[i].Position.X - 10), (int)(scene.Elements[0].strs[i].Position.Y - 10), 30, 30), Color.White);
+                    _spriteBatch.Draw(starTexture, new Rectangle((int)(scene.Elements[0].strs[i].Position.X - 15), (int)(scene.Elements[0].strs[i].Position.Y - 15), 30, 30), Color.White);
             }
 
             // Render clam
-            _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 20), (int)(clam.Position.Y - 30), 70, 70), Color.White);
+            _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30), 70, 70), Color.White);
 
             //scene.Elements[0].Render(_spriteBatch, pantallaRect, checklevel, pearlTexture, starTexture, clamTexture);
 
