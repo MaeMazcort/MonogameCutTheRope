@@ -24,6 +24,10 @@ namespace Project1
         Texture2D pearlTexture;
         Texture2D clamTexture;
         Texture2D starTexture;
+        Texture2D backgroundLayer1;
+        Texture2D bubblesParralax;
+        Texture2D fishesParallax;
+        Texture2D backgroundLayer2;
         Vector2 ballPosition; // Position
         float ballSpeed; // Speed
 
@@ -110,6 +114,10 @@ namespace Project1
             pearlTexture = Content.Load<Texture2D>("perla");
             clamTexture = Content.Load<Texture2D>("almeja");
             starTexture = Content.Load<Texture2D>("estrella");
+            backgroundLayer1 = Content.Load<Texture2D>("fondo0");
+            backgroundLayer2 = Content.Load<Texture2D>("rocaArriba");
+            fishesParallax = Content.Load<Texture2D>("pecesParallax");
+            bubblesParralax = Content.Load<Texture2D>("burbujasParallax");
         }
 
         protected override void Update(GameTime gameTime)
