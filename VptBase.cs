@@ -15,7 +15,6 @@ namespace Project1
     public class VptBase
     {
         public V2 axis, normal, res;
-        // public SolidBrush brush;
         public Color c;
         private float dif, dis;
         public float grndFrict = 0.5f;
@@ -34,7 +33,6 @@ namespace Project1
             Pos = new V2(x, y);
             old = new V2(x, y);
             g = new V2(0, 1);
-            //brush = new SolidBrush(color);
             Id = id;
             IsPinned = isPinned;
             r = radius;

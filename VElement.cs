@@ -133,8 +133,6 @@ namespace Project1
 
         public void Render(SpriteBatch spriteBatch, Rectangle space, int currentLevel, Texture2D perlaTexture, Texture2D estrellaTexture, Texture2D almejaTexture)
         {
-
-
             // Render points
             for (p = 0; p < pts.Count; p++)
             {

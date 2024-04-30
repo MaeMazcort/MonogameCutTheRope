@@ -69,24 +69,16 @@ namespace Project1
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
-            //Init();
-
             stopwatch.Start();
-            //PCT_CANVAS.MouseMove += PCT_MouseMove;
-            //PCT_CANVAS.MouseDown += PCT_MousePressed;
-            //PCT_CANVAS.MouseUp += PCT_MouseReleased;
-            //PCT_CANVAS.Paint += PCT_Paint;
         }
 
         private void Init()
         {
+            pantallaRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
             scene = new Scene();
             scene.AddElement(new VElement());
             scene.Elements[0].SetMap(map);
-            //map.Draw(new Vector2(fCameraPosX, fCameraPosY), scene, pearlTexture, starTexture, clamTexture);
-            pantallaRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width,
-                GraphicsDevice.Viewport.Height);
 
             map = new Map(pantallaRect, ref candy, ref elements, ref clam, scene, pearlTexture, starTexture, clamTexture);
             map.currentLevel = 1;
@@ -99,16 +91,11 @@ namespace Project1
             renderTimer.AutoReset = false;
             levelfinished = false;
             up = false;
-
         }
 
 
         protected override void Initialize()
         {
-            ballPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2,
-            _graphics.PreferredBackBufferHeight / 2);
-            ballSpeed = 100f;
-
             Init();
 
             base.Initialize();
@@ -120,20 +107,19 @@ namespace Project1
             SpriteBatchExtensions.Initialize(GraphicsDevice);
 
             ballTexture = Content.Load<Texture2D>("perla");
-            pearlTexture = Content.Load<Texture2D>("ball");
+            pearlTexture = Content.Load<Texture2D>("perla");
             clamTexture = Content.Load<Texture2D>("almeja");
             starTexture = Content.Load<Texture2D>("estrella");
         }
 
         protected override void Update(GameTime gameTime)
         {
+            // Default in Monogame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            scene.Elements[0].Update(pantallaRect);
-
+            // Draw a line with the mouse
             MouseState mouseState = Mouse.GetState();
-
             if (mouseState.LeftButton == ButtonState.Pressed && !isMousePressed)
             {
                 isMousePressed = true;
@@ -144,8 +130,11 @@ namespace Project1
                 isMousePressed = false;
             }
 
-            // Left code
+            // Code from last project
+            // UpdateEnv(); // Check the logic for thi
             levelfinished = false;
+
+            scene.Elements[0].Update(pantallaRect);
 
             //Check for intersection between CandyVpt and PinnedVpt radius
             RadiusIntersectionDetection(scene.Elements[0].pndPts, scene.Elements[0].cndPts);
