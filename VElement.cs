@@ -185,7 +185,5 @@ namespace Project1
                 spriteBatch.Draw(almejaTexture, new Rectangle((int)(clam.Position.X - 20), (int)(clam.Position.Y - 30),40,40), Color.White);
             }
         }
-
-
     }
 }

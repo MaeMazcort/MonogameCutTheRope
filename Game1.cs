@@ -11,6 +11,7 @@ using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using System.Timers;
 using static System.Formats.Asn1.AsnWriter;
+using System.Collections;
 
 namespace Project1
 {
@@ -106,7 +107,6 @@ namespace Project1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             SpriteBatchExtensions.Initialize(GraphicsDevice);
 
-            ballTexture = Content.Load<Texture2D>("perla");
             pearlTexture = Content.Load<Texture2D>("perla");
             clamTexture = Content.Load<Texture2D>("almeja");
             starTexture = Content.Load<Texture2D>("estrella");
@@ -148,6 +148,7 @@ namespace Project1
                 renderTimer.Start();
                 allowRendering = false;  // Stop rendering until the timer elapses
             }
+            // The else statement is in another part
 
             // Check if the star is collected
             ObtainStar();
@@ -170,11 +171,27 @@ namespace Project1
 
             for (int i = 0; i < scene.Elements[0].pts.Count; i++) {
                 _spriteBatch.Draw(
-                ballTexture, new Rectangle((int)scene.Elements[0].pts[i].Pos.X, (int)scene.Elements[0].pts[i].Pos.Y, 40, 40), Color.White
+                pearlTexture, new Rectangle((int)scene.Elements[0].pts[i].Pos.X, (int)scene.Elements[0].pts[i].Pos.Y, 40, 40), Color.White
             );
-
             }
 
+            // Render stars
+            for (int i = 0; i < scene.Elements[0].strs.Count; i++)
+            {
+                _spriteBatch.Draw(starTexture, new Rectangle((int)(scene.Elements[0].strs[i].Position.X - 10), (int)(scene.Elements[0].strs[i].Position.Y - 10), 40, 40), Color.White);
+            }
+
+            // Render ropes
+            for (int p = 0; p < scene.Elements[0].rps.Count; p++)
+            {
+                scene.Elements[0].rps[p].Render(_spriteBatch, pantallaRect);
+            }
+
+            // Render clam
+            _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 20), (int)(clam.Position.Y - 30), 40, 40), Color.White);
+           
+
+            //scene.Elements[0].Render(_spriteBatch, pantallaRect, checklevel, pearlTexture, starTexture, clamTexture);
 
             // Draw a line in the cut
             if (isMousePressed)
@@ -183,8 +200,9 @@ namespace Project1
                 Vector2 currentMousePosition = new Vector2(mouseState.X, mouseState.Y);
                 _spriteBatch.DrawLine(startMousePosition, currentMousePosition, Color.White);
             }
- 
-            if (allowRendering)
+            
+            // Render ropes
+            if (!levelfinished && allowRendering)
             {
                 scene.Render(_spriteBatch, pantallaRect, checklevel, pearlTexture, starTexture, clamTexture);  // Render only if allowed
                 if (r == 0)
