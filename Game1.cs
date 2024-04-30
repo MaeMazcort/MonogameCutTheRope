@@ -191,14 +191,22 @@ namespace Project1
                     scene.Elements[0].rps[p].Render(_spriteBatch, pantallaRect);
             }
 
+            // Render pinnedPoints
+            for (int p = 0; p < scene.Elements[0].pndPts.Count; p++)
+            {
+                if (scene.Elements[0].pndPts[p].Level == map.currentLevel)
+                    scene.Elements[0].pndPts[p].RenderRadius(_spriteBatch);
+            }
+
             // Render stars
             for (int i = 0; i < scene.Elements[0].strs.Count; i++)
             {
-                _spriteBatch.Draw(starTexture, new Rectangle((int)(scene.Elements[0].strs[i].Position.X - 10), (int)(scene.Elements[0].strs[i].Position.Y - 10), 40, 40), Color.White);
+                if (scene.Elements[0].strs[i].Level == map.currentLevel)
+                    _spriteBatch.Draw(starTexture, new Rectangle((int)(scene.Elements[0].strs[i].Position.X - 10), (int)(scene.Elements[0].strs[i].Position.Y - 10), 30, 30), Color.White);
             }
 
             // Render clam
-            _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 20), (int)(clam.Position.Y - 30), 40, 40), Color.White);
+            _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 20), (int)(clam.Position.Y - 30), 70, 70), Color.White);
 
             //scene.Elements[0].Render(_spriteBatch, pantallaRect, checklevel, pearlTexture, starTexture, clamTexture);
 
