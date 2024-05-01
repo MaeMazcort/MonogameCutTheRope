@@ -50,6 +50,8 @@ namespace Project1
         private System.Timers.Timer renderTimer;
         private bool allowRendering = true;
 
+        Vector2 mouseEnd;
+
         Rectangle pantallaRect;
 
         // Mouse
@@ -169,6 +171,49 @@ namespace Project1
 
             CheckGameState();
 
+            // Slice rope
+            // Handling Mouse Pressed
+            if (mouseState.LeftButton == ButtonState.Pressed && !isMousePressed)
+            {
+                isMousePressed = true;
+                Vector2 startPoint = new Vector2(mouseState.X, mouseState.Y);
+                slicePoints.Add(startPoint); // Add the starting point
+            }
+
+            // Handling Mouse Movement
+            if (isMousePressed)
+            {
+                Vector2 currentPoint = new Vector2(mouseState.X, mouseState.Y);
+                if (!slicePoints.Contains(currentPoint)) // To avoid adding duplicate points
+                {
+                    slicePoints.Add(currentPoint);
+                    if (slicePoints.Count > 1)
+                    {
+                        //IntersectionDetection(scene.Elements[0].stks, slicePoints);
+                        //IntersectionDetection(scene.Elements[0].rps, slicePoints);
+                    }
+
+                    if (slicePoints.Count > 100) // Control line length
+                    {
+                        slicePoints.RemoveAt(0); // Always remove the first added
+                    }
+                }
+            }
+
+            // Handling Mouse Released
+            if (mouseState.LeftButton == ButtonState.Released && isMousePressed)
+            {
+                isMousePressed = false;
+                mouseEnd = new Vector2(mouseState.X, mouseState.Y);
+
+                if (slicePoints.Count > 1)
+                {
+                    //IntersectionDetection(scene.Elements[0].rps, slicePoints);
+                }
+
+                slicePoints.Clear();
+            }
+
             base.Update(gameTime);
         }
 
@@ -193,7 +238,6 @@ namespace Project1
             }
 
             // Render points
-            // TODO: Change the content
             for (int p = 0; p < scene.Elements[0].pts.Count; p++)
             {
                 if (scene.Elements[0].pts[p].Level == map.currentLevel && !(scene.Elements[0].pts[p] is CandyVpt))
