@@ -55,18 +55,6 @@
 /processorParam:TextureFormat=Color
 /build:burbujasParallax.png
 
-#begin burbujasParallax.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:burbujasParallax.png
-
 #begin estrella.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -91,35 +79,11 @@
 /processorParam:TextureFormat=Color
 /build:fondo0.png
 
-#begin fondo0.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:fondo0.png
-
 #begin Inter.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:Inter.fx
-
-#begin pecesParallax.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:pecesParallax.png
 
 #begin pecesParallax.png
 /importer:TextureImporter
@@ -157,7 +121,7 @@
 /processorParam:TextureFormat=Color
 /build:rocaArriba.png
 
-#begin rocaArriba.png
+#begin startVpt.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -167,5 +131,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:rocaArriba.png
+/build:startVpt.png
 

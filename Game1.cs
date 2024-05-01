@@ -24,6 +24,7 @@ namespace Project1
         Texture2D pearlTexture;
         Texture2D clamTexture;
         Texture2D starTexture;
+        Texture2D startPointTexture;
         Texture2D backgroundLayer1;
         Texture2D bubblesParralax;
         Texture2D fishesParallax;
@@ -114,6 +115,7 @@ namespace Project1
             pearlTexture = Content.Load<Texture2D>("perla");
             clamTexture = Content.Load<Texture2D>("almeja");
             starTexture = Content.Load<Texture2D>("estrella");
+            startPointTexture = Content.Load<Texture2D>("startVpt");
             backgroundLayer1 = Content.Load<Texture2D>("fondo0");
             backgroundLayer2 = Content.Load<Texture2D>("rocaArriba");
             fishesParallax = Content.Load<Texture2D>("pecesParallax");
@@ -182,14 +184,6 @@ namespace Project1
             _spriteBatch.Draw(bubblesParralax, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
             _spriteBatch.Draw(fishesParallax, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
             _spriteBatch.Draw(backgroundLayer2, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
-            /*
-            Global._spriteBatch.Draw(Global.L1, new Rectangle(-(int)Global.cameraMono.Position.X / 20, 
-                0, 2 * GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
-            Global._spriteBatch.Draw(Global.L2, new Rectangle(-(int)Global.cameraMono.Position.X / 10, 
-                0, 2 * GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
-            Global._spriteBatch.Draw(Global.background, new Rectangle(-(int)Global.cameraMono.Position.X,
-                0, 2 * GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White); 
-            */
 
             // Render ropes
             for (int p = 0; p < scene.Elements[0].rps.Count; p++)
@@ -203,7 +197,7 @@ namespace Project1
             for (int p = 0; p < scene.Elements[0].pts.Count; p++)
             {
                 if (scene.Elements[0].pts[p].Level == map.currentLevel && !(scene.Elements[0].pts[p] is CandyVpt))
-                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)scene.Elements[0].pts[p].Pos.X - 15, (int)scene.Elements[0].pts[p].Pos.Y - 15, 30, 30), Color.White);
+                    _spriteBatch.Draw(startPointTexture, new Rectangle((int)scene.Elements[0].pts[p].Pos.X - 10, (int)scene.Elements[0].pts[p].Pos.Y - 10, 20, 20), Color.White);
             }
 
             // Render pearl
