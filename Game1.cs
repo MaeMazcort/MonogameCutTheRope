@@ -224,8 +224,6 @@ namespace Project1
             // Render clam
             _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30), 70, 70), Color.White);
 
-            //scene.Elements[0].Render(_spriteBatch, pantallaRect, checklevel, pearlTexture, starTexture, clamTexture);
-
             // Draw a line in the cut
             if (isMousePressed)
             {
