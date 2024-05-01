@@ -177,6 +177,20 @@ namespace Project1
             // Show elements on the map
             _spriteBatch.Begin();
 
+            // Parallax
+            _spriteBatch.Draw(backgroundLayer1, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+            _spriteBatch.Draw(bubblesParralax, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+            _spriteBatch.Draw(fishesParallax, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+            _spriteBatch.Draw(backgroundLayer2, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+            /*
+            Global._spriteBatch.Draw(Global.L1, new Rectangle(-(int)Global.cameraMono.Position.X / 20, 
+                0, 2 * GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+            Global._spriteBatch.Draw(Global.L2, new Rectangle(-(int)Global.cameraMono.Position.X / 10, 
+                0, 2 * GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+            Global._spriteBatch.Draw(Global.background, new Rectangle(-(int)Global.cameraMono.Position.X,
+                0, 2 * GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White); 
+            */
+
             // Render ropes
             for (int p = 0; p < scene.Elements[0].rps.Count; p++)
             {
