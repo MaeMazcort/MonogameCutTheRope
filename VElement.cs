@@ -120,7 +120,7 @@ namespace Project1
 
 
 
-        public void Render(SpriteBatch _spriteBatch, Rectangle pantallaRect, int currentLevel, Texture2D pearlTexture, Texture2D starTexture, Texture2D clamTexture, Texture2D startPointTexture)
+        public void Render(SpriteBatch _spriteBatch, Rectangle pantallaRect, int currentLevel, Texture2D pearlTexture, Texture2D starTexture, Texture2D clamTexture, Texture2D startPointTexture, Camera cameraMono)
         {
             // Render ropes
             for (int p = 0; p < rps.Count; p++)
@@ -133,14 +133,14 @@ namespace Project1
             for (int p = 0; p < pts.Count; p++)
             {
                 if (pts[p].Level == currentLevel && !(pts[p] is CandyVpt))
-                    _spriteBatch.Draw(startPointTexture, new Rectangle((int)pts[p].Pos.X - 10, (int)pts[p].Pos.Y - 10, 20, 20), Color.White);
+                    _spriteBatch.Draw(startPointTexture, new Rectangle((int)pts[p].Pos.X - 10, (int)(pts[p].Pos.Y - 10 - cameraMono.position.Y), 20, 20), Color.White);
             }
 
             // Render pearl
             for (int p = 0; p < cndPts.Count; p++)
             {
                 if (cndPts[p].Level == currentLevel)
-                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)pts[p].Pos.X - 20, (int)pts[p].Pos.Y - 20, 40, 40), Color.White);
+                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)pts[p].Pos.X - 20, (int)(pts[p].Pos.Y - 20 - cameraMono.position.Y), 40, 40), Color.White);
             }
 
             // Render pinnedPoints
@@ -154,7 +154,7 @@ namespace Project1
             for (int i = 0; i < strs.Count; i++)
             {
                 if (strs[i].Level == currentLevel)
-                    _spriteBatch.Draw(starTexture, new Rectangle((int)(strs[i].Position.X - 15), (int)(strs[i].Position.Y - 15), 30, 30), Color.White);
+                    _spriteBatch.Draw(starTexture, new Rectangle((int)(strs[i].Position.X - 15), (int)(strs[i].Position.Y - 15 - cameraMono.position.Y), 30, 30), Color.White);
             }
 
             // Render clam
@@ -163,7 +163,7 @@ namespace Project1
             // Render clam
             if (clamState == 1)
             {
-                _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30), 70, 70), Color.White);
+                _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30 - cameraMono.position.Y), 70, 70), Color.White);
             }
         }
     }

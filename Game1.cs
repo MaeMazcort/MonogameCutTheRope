@@ -3,15 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Threading;
 using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
-using System.Timers;
-using static System.Formats.Asn1.AsnWriter;
-using System.Collections;
 
 namespace Project1
 {
@@ -57,8 +51,6 @@ namespace Project1
             int h = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             int div = 1;
 
-            //pantallaRect = new Rectangle(0, 0, w, h);
-
             _graphics.PreferredBackBufferWidth = w / div;
             _graphics.PreferredBackBufferHeight = h / div;
             _graphics.ApplyChanges();
@@ -69,7 +61,7 @@ namespace Project1
 
         private void Init()
         {
-            pantallaRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            pantallaRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height * 3);
             cameraMono = new Camera(new V2(0, 0));
             elements = new VElement();
             elements.SetMap(map);
@@ -206,7 +198,7 @@ namespace Project1
             _spriteBatch.Draw(fishesParallax, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
             _spriteBatch.Draw(backgroundLayer2, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
-            elements.Render(_spriteBatch, pantallaRect, map.currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture);
+            elements.Render(_spriteBatch, pantallaRect, map.currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, cameraMono);
 
             // Draw a line in the cut
             if (isMousePressed)
@@ -217,7 +209,7 @@ namespace Project1
             }
             
             // Render ropes
-            /*
+            
             if (!levelfinished && allowRendering)
             {
                 if (r == 0)
@@ -240,7 +232,7 @@ namespace Project1
                     r++;
                 }
             }
-            */
+            
             
             _spriteBatch.End();
 
