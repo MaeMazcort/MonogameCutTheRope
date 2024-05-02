@@ -121,9 +121,6 @@ namespace Project1
             cameraMono.Follow(candy.Pos, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             cameraMono.ClampToArea(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height * 3, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
-            //Check for intersection between CandyVpt and PinnedVpt radius
-            RadiusIntersectionDetection(elements.pndPts, elements.cndPts);
-
             //levelfinished = LevelChangeDetections(scene.Elements[0].clam);
             if (levelfinished)
             {
@@ -207,7 +204,10 @@ namespace Project1
                 Vector2 currentMousePosition = new Vector2(mouseState.X, mouseState.Y);
                 _spriteBatch.DrawLine(startMousePosition, currentMousePosition, Color.White);
             }
-            
+
+            //Check for intersection between CandyVpt and PinnedVpt radius
+            RadiusIntersectionDetection(elements.pndPts, elements.cndPts);
+
             // Render ropes
             
             if (!levelfinished && allowRendering)
@@ -233,7 +233,7 @@ namespace Project1
                 }
             }
             
-            
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
@@ -283,6 +283,12 @@ namespace Project1
             }
         }
 
+        private float DistanceBetweenPoints(Vector2 point1, Vector2 point2)
+        {
+            // Calculate the Euclidean distance between two points
+            return (float)Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
+        }
+
         private void RadiusIntersectionDetection(List<PinnedVpt> pinnedVpts, List<CandyVpt> candyVpts)
         {
             foreach (var pinnedPt in pinnedVpts)
@@ -300,12 +306,6 @@ namespace Project1
                     }
                 }
             }
-        }
-
-        private float DistanceBetweenPoints(Vector2 point1, Vector2 point2)
-        {
-            // Calculate the Euclidean distance between two points
-            return (float)Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
         }
 
         public void ObtainStar()
