@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project1
 {
-    internal class Camera
+    public class Camera
     {
         public V2 position {  get; private set; }
 

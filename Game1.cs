@@ -21,14 +21,7 @@ namespace Project1
         private SpriteBatch _spriteBatch;
 
         Texture2D ballTexture; // Ball
-        Texture2D pearlTexture;
-        Texture2D clamTexture;
-        Texture2D starTexture;
-        Texture2D startPointTexture;
-        Texture2D backgroundLayer1;
-        Texture2D bubblesParralax;
-        Texture2D fishesParallax;
-        Texture2D backgroundLayer2;
+        Texture2D pearlTexture, clamTexture,starTexture, startPointTexture, backgroundLayer1, bubblesParralax, fishesParallax, backgroundLayer2;
         Vector2 ballPosition; // Position
         float ballSpeed; // Speed
 
@@ -36,18 +29,13 @@ namespace Project1
         CandyVpt candy;
         VElement elements;
         Clam clam;
+        public Camera cameraMono;
 
-        public float delta;
         public Scene scene;
         private List<Vector2> slicePoints = new List<Vector2>();
-        private Stopwatch stopwatch = new Stopwatch();
         //private Point mouseStart, mouseEnd;
         private int checklevel;
-        public int r, tick_counter = 0;
-        private float targetPosY;
-        private float easingStartTime;
-        private float easingDuration = 1.0f; // Duration in seconds
-        private System.Timers.Timer renderTimer;
+        public int r;
         private bool allowRendering = true;
 
         Vector2 mouseEnd;
@@ -59,7 +47,8 @@ namespace Project1
         Vector2 startMousePosition; // Almacena la posición del mouse cuando se presiona el botón izquierdo
         private bool isMousePressed;
 
-        bool levelfinished, up;
+        bool levelfinished;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -77,28 +66,23 @@ namespace Project1
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            stopwatch.Start();
         }
 
         private void Init()
         {
-            pantallaRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-
+            pantallaRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height * 3);
+            cameraMono = new Camera(new V2(0, 0));
             scene = new Scene();
-            scene.AddElement(new VElement());
-            scene.Elements[0].SetMap(map);
+            elements = new VElement(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height * 3);
+            scene.AddElement(elements);
+            elements.SetMap(map);
 
             map = new Map(pantallaRect, ref candy, ref elements, ref clam, scene, pearlTexture, starTexture, clamTexture);
             map.currentLevel = 1;
 
-            delta = 0;
             checklevel = 0;
             r = 0;
-            renderTimer = new System.Timers.Timer();
-            renderTimer.Elapsed += OnRenderTimerElapsed;
-            renderTimer.AutoReset = false;
             levelfinished = false;
-            up = false;
         }
 
 
@@ -142,32 +126,25 @@ namespace Project1
                 isMousePressed = false;
             }
 
-            // Code from last project
-            // UpdateEnv(); // Check the logic for thi
             levelfinished = false;
 
-            scene.Elements[0].Update(pantallaRect);
+            elements.Update();
+            cameraMono.Follow(candy.Pos, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            cameraMono.ClampToArea(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height * 3, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
             //Check for intersection between CandyVpt and PinnedVpt radius
-            RadiusIntersectionDetection(scene.Elements[0].pndPts, scene.Elements[0].cndPts);
+            RadiusIntersectionDetection(elements.pndPts, elements.cndPts);
 
-            levelfinished = LevelChangeDetections(scene.Elements[0].clam);
+            //levelfinished = LevelChangeDetections(scene.Elements[0].clam);
             if (levelfinished)
             {
                 r = 0;
-                // Start the timer to delay rendering
-                renderTimer.Interval = 2000;  // Delay rendering for 2 seconds, adjust as needed
-                renderTimer.Start();
                 allowRendering = false;  // Stop rendering until the timer elapses
             }
             // The else statement is in another part
 
             // Check if the star is collected
             ObtainStar();
-
-            tick_counter++;
-
-            delta += 0.001f;
 
             CheckGameState();
 
@@ -231,38 +208,38 @@ namespace Project1
             _spriteBatch.Draw(backgroundLayer2, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
             // Render ropes
-            for (int p = 0; p < scene.Elements[0].rps.Count; p++)
+            for (int p = 0; p < elements.rps.Count; p++)
             {
-                if (scene.Elements[0].rps[p].Level == map.currentLevel)
-                    scene.Elements[0].rps[p].Render(_spriteBatch, pantallaRect);
+                if (elements.rps[p].Level == map.currentLevel)
+                    elements.rps[p].Render(_spriteBatch, pantallaRect);
             }
 
             // Render points
-            for (int p = 0; p < scene.Elements[0].pts.Count; p++)
+            for (int p = 0; p < elements.pts.Count; p++)
             {
-                if (scene.Elements[0].pts[p].Level == map.currentLevel && !(scene.Elements[0].pts[p] is CandyVpt))
-                    _spriteBatch.Draw(startPointTexture, new Rectangle((int)scene.Elements[0].pts[p].Pos.X - 10, (int)scene.Elements[0].pts[p].Pos.Y - 10, 20, 20), Color.White);
+                if (elements.pts[p].Level == map.currentLevel && !(elements.pts[p] is CandyVpt))
+                    _spriteBatch.Draw(startPointTexture, new Rectangle((int)elements.pts[p].Pos.X - 10, (int)elements.pts[p].Pos.Y - 10, 20, 20), Color.White);
             }
 
             // Render pearl
-            for (int p = 0; p < scene.Elements[0].cndPts.Count; p++)
+            for (int p = 0; p < elements.cndPts.Count; p++)
             {
-                if (scene.Elements[0].cndPts[p].Level == map.currentLevel)
-                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)scene.Elements[0].pts[p].Pos.X - 20, (int)scene.Elements[0].pts[p].Pos.Y - 20, 40, 40), Color.White);
+                if (elements.cndPts[p].Level == map.currentLevel)
+                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)elements.pts[p].Pos.X - 20, (int)elements.pts[p].Pos.Y - 20, 40, 40), Color.White);
             }
 
             // Render pinnedPoints
-            for (int p = 0; p < scene.Elements[0].pndPts.Count; p++)
+            for (int p = 0; p < elements.pndPts.Count; p++)
             {
-                if (scene.Elements[0].pndPts[p].Level == map.currentLevel)
-                    scene.Elements[0].pndPts[p].RenderRadius(_spriteBatch);
+                if (elements.pndPts[p].Level == map.currentLevel)
+                    elements.pndPts[p].RenderRadius(_spriteBatch);
             }
 
             // Render stars
-            for (int i = 0; i < scene.Elements[0].strs.Count; i++)
+            for (int i = 0; i < elements.strs.Count; i++)
             {
-                if (scene.Elements[0].strs[i].Level == map.currentLevel)
-                    _spriteBatch.Draw(starTexture, new Rectangle((int)(scene.Elements[0].strs[i].Position.X - 15), (int)(scene.Elements[0].strs[i].Position.Y - 15), 30, 30), Color.White);
+                if (elements.strs[i].Level == map.currentLevel)
+                    _spriteBatch.Draw(starTexture, new Rectangle((int)(elements.strs[i].Position.X - 15), (int)(elements.strs[i].Position.Y - 15), 30, 30), Color.White);
             }
 
             // Render clam
@@ -277,22 +254,23 @@ namespace Project1
             }
             
             // Render ropes
+            
             if (!levelfinished && allowRendering)
             {
                 scene.Render(_spriteBatch, pantallaRect, checklevel, pearlTexture, starTexture, clamTexture);  // Render only if allowed
                 if (r == 0)
                 {
-                    if (scene.Elements[0].cndPts.Count > 0)
+                    if (elements.cndPts.Count > 0)
                     {
-                        for (int i = 0; i < scene.Elements[0].cndPts.Count; i++)
+                        for (int i = 0; i < elements.cndPts.Count; i++)
                         {
-                            for (int j = 0; j < scene.Elements[0].strtPts.Count; j++)
+                            for (int j = 0; j < elements.strtPts.Count; j++)
                             {
-                                if (scene.Elements[0].strtPts[j].Level == scene.Elements[0].cndPts[i].Level)
+                                if (elements.strtPts[j].Level == elements.cndPts[i].Level)
                                 {
-                                    VRope rope = new VRope(scene.Elements[0].strtPts[j], scene.Elements[0].cndPts[i], 6,
-                                    scene.Elements[0].strtPts[j].Level);
-                                    scene.Elements[0].AddRope(rope);
+                                    VRope rope = new VRope(elements.strtPts[j], elements.cndPts[i], 6,
+                                    elements.strtPts[j].Level);
+                                    elements.AddRope(rope);
                                 }
                             }
                         }
@@ -300,24 +278,10 @@ namespace Project1
                     r++;
                 }
             }
-
+            
             _spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-        private void OnRenderTimerElapsed(object sender, ElapsedEventArgs e)
-        {
-            allowRendering = true;
-        }
-
-        private float GetCurrentTimeInSeconds()
-        {
-            return (float)stopwatch.Elapsed.TotalSeconds;
-        }
-
-        private float easeInOutQuad(float t)
-        {
-            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
         }
         
         private Vector2 ConvertScreenToWorld(Vector2 screenPoint)
@@ -375,7 +339,7 @@ namespace Project1
                         if (pinnedPt.Available)
                         {
                             VRope rope = new VRope(pinnedPt, candyPt, 6, pinnedPt.Level);
-                            scene.Elements[0].AddRope(rope);
+                            elements.AddRope(rope);
                             pinnedPt.Available = false;
                         }
                     }
@@ -393,9 +357,9 @@ namespace Project1
         {
             List<Star> collectedStars = new List<Star>();
 
-            foreach (var star in scene.Elements[0].strs)
+            foreach (var star in elements.strs)
             {
-                foreach (var candy in scene.Elements[0].cndPts)
+                foreach (var candy in elements.cndPts)
                 {
                     star.CheckCollision(candy);
                     if (star.IsCollected)
@@ -410,15 +374,15 @@ namespace Project1
             // Remove the collected stars from the main list after checking all stars
             foreach (var collectedStar in collectedStars)
             {
-                scene.Elements[0].strs.Remove(collectedStar);
+                elements.strs.Remove(collectedStar);
             }
         }
 
         public bool LevelChangeDetections(Clam clam)
         {
-            for (int i = 0; i < scene.Elements[0].cndPts.Count; i++)
+            for (int i = 0; i < elements.cndPts.Count; i++)
             {
-                if (clam.AteCandy(scene.Elements[0].cndPts[i]))
+                if (clam.AteCandy(elements.cndPts[i]))
                 {
                     map.score += 100;
                     if (map.currentLevel == 3)
@@ -429,8 +393,8 @@ namespace Project1
                     {
                         Console.WriteLine("Level " + map.currentLevel + " completed!");
 
-                        scene.Elements[0].cndPts.Remove(scene.Elements[0].cndPts[i]);
-                        scene.Elements[0].DeleteClam();
+                        elements.cndPts.Remove(elements.cndPts[i]);
+                        elements.DeleteClam();
                         Console.WriteLine("\nLevel " + map.currentLevel + " started!");
                     }
                     map.currentLevel++;
@@ -444,11 +408,11 @@ namespace Project1
         public bool CheckCandyVptCollisionWithFloor()
         {
             // Loop through all elements to find CandyVpt
-            for (int i = 0; i < scene.Elements[0].cndPts.Count; i++)
+            for (int i = 0; i < elements.cndPts.Count; i++)
             {
                 // Calculate the tile coordinates for the candy
-                int tileX = (int)(scene.Elements[0].cndPts[i].Pos.X / map.nTileWidth);
-                int tileY = (int)(scene.Elements[0].cndPts[i].Pos.Y / map.nTileHeight) + 1;  // Check the tile directly below the candy
+                int tileX = (int)(elements.cndPts[i].Pos.X / map.nTileWidth);
+                int tileY = (int)(elements.cndPts[i].Pos.Y / map.nTileHeight) + 1;  // Check the tile directly below the candy
 
                 // Check if the tile below the candy is a floor ('#')
                 if (tileY < map.nLevelHeight && map.GetTile(tileX, tileY) == '#')
