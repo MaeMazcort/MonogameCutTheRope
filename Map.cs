@@ -72,8 +72,6 @@ namespace Project1
             int nTileWidth = size.Width / nLevelWidth;
             int nTileHeight = size.Height / nLevelHeight;
 
-            Size bmp = new Size(2 * size.Width, size.Height);
-
             for (int y = 0; y < nLevelHeight; y++)
             {
                 for (int x = 0; x < nLevelWidth; x++)

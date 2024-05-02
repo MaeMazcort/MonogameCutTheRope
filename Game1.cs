@@ -206,43 +206,7 @@ namespace Project1
             _spriteBatch.Draw(fishesParallax, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
             _spriteBatch.Draw(backgroundLayer2, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
-            // Render ropes
-            for (int p = 0; p < elements.rps.Count; p++)
-            {
-                if (elements.rps[p].Level == map.currentLevel)
-                    elements.rps[p].Render(_spriteBatch, pantallaRect);
-            }
-
-            // Render points
-            for (int p = 0; p < elements.pts.Count; p++)
-            {
-                if (elements.pts[p].Level == map.currentLevel && !(elements.pts[p] is CandyVpt))
-                    _spriteBatch.Draw(startPointTexture, new Rectangle((int)elements.pts[p].Pos.X - 10, (int)elements.pts[p].Pos.Y - 10, 20, 20), Color.White);
-            }
-
-            // Render pearl
-            for (int p = 0; p < elements.cndPts.Count; p++)
-            {
-                if (elements.cndPts[p].Level == map.currentLevel)
-                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)elements.pts[p].Pos.X - 20, (int)elements.pts[p].Pos.Y - 20, 40, 40), Color.White);
-            }
-
-            // Render pinnedPoints
-            for (int p = 0; p < elements.pndPts.Count; p++)
-            {
-                if (elements.pndPts[p].Level == map.currentLevel)
-                    elements.pndPts[p].RenderRadius(_spriteBatch);
-            }
-
-            // Render stars
-            for (int i = 0; i < elements.strs.Count; i++)
-            {
-                if (elements.strs[i].Level == map.currentLevel)
-                    _spriteBatch.Draw(starTexture, new Rectangle((int)(elements.strs[i].Position.X - 15), (int)(elements.strs[i].Position.Y - 15), 30, 30), Color.White);
-            }
-
-            // Render clam
-            _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30), 70, 70), Color.White);
+            elements.Render(_spriteBatch, pantallaRect, map.currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture);
 
             // Draw a line in the cut
             if (isMousePressed)
@@ -253,7 +217,7 @@ namespace Project1
             }
             
             // Render ropes
-            
+            /*
             if (!levelfinished && allowRendering)
             {
                 if (r == 0)
@@ -276,7 +240,7 @@ namespace Project1
                     r++;
                 }
             }
-            
+            */
             
             _spriteBatch.End();
 

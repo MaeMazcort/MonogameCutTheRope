@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using System.Reflection.Metadata;
 using Microsoft.Xna.Framework.Content;
+using System.Xml.Linq;
 
 namespace Project1
 {
@@ -119,58 +120,50 @@ namespace Project1
 
 
 
-        public void Render(SpriteBatch spriteBatch, Rectangle space, int currentLevel, Texture2D perlaTexture, Texture2D estrellaTexture, Texture2D almejaTexture)
+        public void Render(SpriteBatch _spriteBatch, Rectangle pantallaRect, int currentLevel, Texture2D pearlTexture, Texture2D starTexture, Texture2D clamTexture, Texture2D startPointTexture)
         {
-            // Render points
-            for (p = 0; p < pts.Count; p++)
-            {
-                if (pts[p].Level == currentLevel && !(pts[p] is CandyVpt))
-                {
-                    pts[p].Render(spriteBatch);
-                }
-            }
-
-            // Render pearls
-            for (p = 0; p < cndPts.Count; p++)
-            {
-                if (cndPts[p].Level == currentLevel)
-                {
-                    spriteBatch.Draw(perlaTexture, new Vector2(cndPts[p].Pos.X - 10, cndPts[p].Pos.Y - 10), Color.White);
-                }
-            }
-
             // Render ropes
-            for (p = 0; p < rps.Count; p++)
+            for (int p = 0; p < rps.Count; p++)
             {
                 if (rps[p].Level == currentLevel)
-                {
-                    rps[p].Render(spriteBatch, space);
-                }
+                    rps[p].Render(_spriteBatch, pantallaRect);
+            }
+
+            // Render points
+            for (int p = 0; p < pts.Count; p++)
+            {
+                if (pts[p].Level == currentLevel && !(pts[p] is CandyVpt))
+                    _spriteBatch.Draw(startPointTexture, new Rectangle((int)pts[p].Pos.X - 10, (int)pts[p].Pos.Y - 10, 20, 20), Color.White);
+            }
+
+            // Render pearl
+            for (int p = 0; p < cndPts.Count; p++)
+            {
+                if (cndPts[p].Level == currentLevel)
+                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)pts[p].Pos.X - 20, (int)pts[p].Pos.Y - 20, 40, 40), Color.White);
             }
 
             // Render pinnedPoints
-            for (p = 0; p < pndPts.Count; p++)
+            for (int p = 0; p < pndPts.Count; p++)
             {
                 if (pndPts[p].Level == currentLevel)
-                {
-                    pndPts[p].RenderRadius(spriteBatch);
-
-                }
+                    pndPts[p].RenderRadius(_spriteBatch);
             }
 
             // Render stars
             for (int i = 0; i < strs.Count; i++)
             {
                 if (strs[i].Level == currentLevel)
-                {
-                    spriteBatch.Draw(estrellaTexture, new Rectangle((int)(strs[i].Position.X - 10), (int)(strs[i].Position.Y - 10), 40, 40), Color.White);
-                }
+                    _spriteBatch.Draw(starTexture, new Rectangle((int)(strs[i].Position.X - 15), (int)(strs[i].Position.Y - 15), 30, 30), Color.White);
             }
+
+            // Render clam
+            
 
             // Render clam
             if (clamState == 1)
             {
-                spriteBatch.Draw(almejaTexture, new Rectangle((int)(clam.Position.X - 20), (int)(clam.Position.Y - 30),40,40), Color.White);
+                _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30), 70, 70), Color.White);
             }
         }
     }
