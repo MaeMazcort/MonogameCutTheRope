@@ -31,7 +31,6 @@ namespace Project1
         Clam clam;
         public Camera cameraMono;
 
-        public Scene scene;
         private List<Vector2> slicePoints = new List<Vector2>();
         //private Point mouseStart, mouseEnd;
         private int checklevel;
@@ -72,12 +71,10 @@ namespace Project1
         {
             pantallaRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             cameraMono = new Camera(new V2(0, 0));
-            scene = new Scene();
             elements = new VElement();
-            scene.AddElement(elements);
             elements.SetMap(map);
 
-            map = new Map(pantallaRect, ref candy, ref elements, ref clam, scene, pearlTexture, starTexture, clamTexture);
+            map = new Map(pantallaRect, ref candy, ref elements, ref clam, pearlTexture, starTexture, clamTexture);
             map.currentLevel = 1;
 
             checklevel = 0;
@@ -259,7 +256,6 @@ namespace Project1
             
             if (!levelfinished && allowRendering)
             {
-                scene.Render(_spriteBatch, pantallaRect, checklevel, pearlTexture, starTexture, clamTexture);  // Render only if allowed
                 if (r == 0)
                 {
                     if (elements.cndPts.Count > 0)
@@ -280,6 +276,7 @@ namespace Project1
                     r++;
                 }
             }
+            
             
             _spriteBatch.End();
 
@@ -380,7 +377,7 @@ namespace Project1
             }
         }
 
-        public bool LevelChangeDetections(Clam clam)
+        public void LevelChangeDetections(Clam clam)
         {
             for (int i = 0; i < elements.cndPts.Count; i++)
             {
@@ -400,10 +397,8 @@ namespace Project1
                         Console.WriteLine("\nLevel " + map.currentLevel + " started!");
                     }
                     map.currentLevel++;
-                    return true;
                 }
             }
-            return false;
         }
 
 

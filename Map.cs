@@ -34,7 +34,7 @@ namespace Project1
         string sLevel;
 
 
-        public Map(Rectangle size, ref CandyVpt candy, ref VElement elements, ref Clam clam, Scene scene, Texture2D perlaTexture, Texture2D estrellaTexture, Texture2D almejaTexture)
+        public Map(Rectangle size, ref CandyVpt candy, ref VElement elements, ref Clam clam, Texture2D perlaTexture, Texture2D estrellaTexture, Texture2D almejaTexture)
         {
             score = 0;
 
@@ -91,6 +91,7 @@ namespace Project1
                     if (sLevel[index] == 'M')
                     {
                         clam = new Clam(x * nTileWidth, y * nTileHeight, almejaTexture);
+                        elements.SetClam(clam);
                     }
                 }
             }

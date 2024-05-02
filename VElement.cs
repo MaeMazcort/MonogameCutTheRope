@@ -53,6 +53,7 @@ namespace Project1
         {
             this.clam = clam;
             clamState = 1;
+
         }
 
         public void SetMap(Map map)
