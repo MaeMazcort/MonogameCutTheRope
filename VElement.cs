@@ -49,9 +49,9 @@ namespace Project1
         public Texture2D Texture { get; set; } // Unused?
         public int clamState;
 
-        public void SetClam(Vector2 position, Texture2D texture)
+        public void SetClam(Clam clam)
         {
-            clam = new Clam(position.X, position.Y, texture);
+            this.clam = clam;
             clamState = 1;
 
         }

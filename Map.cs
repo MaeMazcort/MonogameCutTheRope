@@ -84,14 +84,14 @@ namespace Project1
                         Vector2 posicion = new Vector2(x * nTileWidth, y * nTileHeight);
 
                         candy = new CandyVpt(x * nTileWidth, y * nTileHeight, id, level: 1, perlaTexture);
-                        scene.Elements[0].AddPoint(candy);
-                        scene.Elements[0].AddCandyPoint(candy);
+                        elements.AddPoint(candy);
+                        elements.AddCandyPoint(candy);
                         id++;
                     }
                     if (sLevel[index] == 'M')
                     {
                         clam = new Clam(x * nTileWidth, y * nTileHeight, almejaTexture);
-                        scene.Elements[0].SetClam(new Vector2(stepX, stepY), almejaTexture);
+                        elements.SetClam(clam);
                     }
                 }
             }
@@ -107,12 +107,12 @@ namespace Project1
 
                         case 'S':
                             var star1 = new Star(x * nTileWidth, y * nTileHeight, level: 1, estrellaTexture);
-                            scene.Elements[0].AddStar(star1);
+                            elements.AddStar(star1);
                             break;
                         case '1':
                             var startVpt1 = new StartVpt(x * nTileWidth, y * nTileHeight, id, level: 1);
-                            scene.Elements[0].AddPoint(startVpt1);
-                            scene.Elements[0].AddStartPoint(startVpt1);
+                            elements.AddPoint(startVpt1);
+                            elements.AddStartPoint(startVpt1);
                             id++;
                             break;
                     }

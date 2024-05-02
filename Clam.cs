@@ -22,15 +22,6 @@ namespace Project1
             Texture = texture;
         }
 
-        // Not used
-        /*
-        public void DrawClam(Graphics g)
-        {
-            // Drawing a simple star, you can replace this with a more complex shape or an image
-            g.FillEllipse(Brushes.Ivory, Position.X - 10, Position.Y - 10, 20, 20);
-        }
-        */
-
         public bool AteCandy(CandyVpt candy)
         {
             float distance = Distance(Position, new Vector2(candy.Pos.X, candy.Pos.Y));

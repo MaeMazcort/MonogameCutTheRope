@@ -70,10 +70,10 @@ namespace Project1
 
         private void Init()
         {
-            pantallaRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height * 3);
+            pantallaRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             cameraMono = new Camera(new V2(0, 0));
             scene = new Scene();
-            elements = new VElement(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height * 3);
+            elements = new VElement();
             scene.AddElement(elements);
             elements.SetMap(map);
 
@@ -128,7 +128,7 @@ namespace Project1
 
             levelfinished = false;
 
-            elements.Update();
+            elements.Update(pantallaRect);
             cameraMono.Follow(candy.Pos, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             cameraMono.ClampToArea(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height * 3, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
@@ -147,6 +147,8 @@ namespace Project1
             ObtainStar();
 
             CheckGameState();
+
+            LevelChangeDetections(clam);
 
             // Slice rope
             // Handling Mouse Pressed
@@ -254,7 +256,7 @@ namespace Project1
             }
             
             // Render ropes
-            
+            /*
             if (!levelfinished && allowRendering)
             {
                 scene.Render(_spriteBatch, pantallaRect, checklevel, pearlTexture, starTexture, clamTexture);  // Render only if allowed
@@ -278,7 +280,7 @@ namespace Project1
                     r++;
                 }
             }
-            
+            */
             _spriteBatch.End();
 
             base.Draw(gameTime);
