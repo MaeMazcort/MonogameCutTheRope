@@ -125,7 +125,6 @@ namespace Project1
                 if (!isMousePressed)
                 {
                     isMousePressed = true;
-                    startMousePosition = worldMousePosition;
                 }
                 else
                 {
@@ -179,7 +178,6 @@ namespace Project1
                     }
                 }
             }
-            startMousePosition = currentMousePosition;  // Actualiza la posición de inicio para el próximo movimiento
         }
 
 
