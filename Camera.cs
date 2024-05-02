@@ -27,5 +27,6 @@ namespace Project1
             position.X = Math.Clamp(position.X, 0, width - xW);
             position.Y = Math.Clamp(position.Y, 0, height - yH);
         }
+
     }
 }
