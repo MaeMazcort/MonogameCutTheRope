@@ -77,10 +77,5 @@ namespace Project1
             Sticks.Remove(stick);
         }
 
-        public void DeleteCutVRope()
-        {
-            Sticks.Clear();
-        }
-
     }
 }

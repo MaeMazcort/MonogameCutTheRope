@@ -252,13 +252,6 @@ namespace Project1
 
             base.Draw(gameTime);
         }
-        
-
-
-        private void IntersectionDetection(List<VRope> ropes, Vector2 mousePosition)
-        {
-            //
-        }
 
         private void RadiusIntersectionDetection(List<PinnedVpt> pinnedVpts, List<CandyVpt> candyVpts)
         {
