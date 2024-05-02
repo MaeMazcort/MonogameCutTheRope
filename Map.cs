@@ -53,20 +53,20 @@ namespace Project1
             sLevel += "..........S..........";
             sLevel += ".....................";
             sLevel += ".....................";
-            sLevel += ".....................";
+            sLevel += "..........P..........";
             sLevel += ".....................";
             sLevel += ".....................";
             sLevel += ".....................";
             sLevel += "....................."; // 20
             sLevel += ".....................";
+            sLevel += "...P.................";
             sLevel += ".....................";
             sLevel += ".....................";
             sLevel += ".....................";
             sLevel += ".....................";
             sLevel += ".....................";
             sLevel += ".....................";
-            sLevel += ".....................";
-            sLevel += "..........M..........";
+            sLevel += "...M.................";
             sLevel += "....................."; // 20
 
             int nTileWidth = size.Width / nLevelWidth;
@@ -111,6 +111,12 @@ namespace Project1
                             var startVpt1 = new StartVpt(x * nTileWidth, y * nTileHeight, id, level: 1);
                             elements.AddPoint(startVpt1);
                             elements.AddStartPoint(startVpt1);
+                            id++;
+                            break;
+                        case 'P':
+                            var pinnedpoint = new PinnedVpt(x * nTileWidth, y * nTileHeight, id, 30, true, level: 1);
+                            elements.AddPoint(pinnedpoint);
+                            elements.AddPinnedPoint(pinnedpoint);
                             id++;
                             break;
                     }

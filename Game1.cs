@@ -272,7 +272,7 @@ namespace Project1
                     {
                         if (pinnedPt.Available)
                         {
-                            VRope rope = new VRope(pinnedPt, candyPt, 6, pinnedPt.Level);
+                            VRope rope = new VRope(pinnedPt, candyPt, 15, pinnedPt.Level);
                             elements.AddRope(rope);
                             pinnedPt.Available = false;
                         }
