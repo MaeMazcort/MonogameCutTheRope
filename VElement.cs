@@ -53,7 +53,6 @@ namespace Project1
         {
             this.clam = clam;
             clamState = 1;
-
         }
 
         public void SetMap(Map map)
@@ -99,18 +98,6 @@ namespace Project1
             for (p = 0; p < pts.Count; p++)
                 pts[p].Update2(space, pts);
 
-            // Perform iterations
-            for (l = 0; l < 5; l++)
-            {
-                for (p = 0; p < stks.Count; p++)
-                    stks[p].Update();
-
-                for (p = 0; p < pts.Count; p++)
-                    pts[p].DetectCollision(pts);
-
-                for (p = 0; p < pts.Count; p++)
-                    pts[p].Constraints(space);
-            }
             //Update points
             for (p = 0; p < pts.Count; p++)
             {

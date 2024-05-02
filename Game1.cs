@@ -256,7 +256,7 @@ namespace Project1
             }
             
             // Render ropes
-            /*
+            
             if (!levelfinished && allowRendering)
             {
                 scene.Render(_spriteBatch, pantallaRect, checklevel, pearlTexture, starTexture, clamTexture);  // Render only if allowed
@@ -280,7 +280,7 @@ namespace Project1
                     r++;
                 }
             }
-            */
+            
             _spriteBatch.End();
 
             base.Draw(gameTime);

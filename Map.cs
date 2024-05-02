@@ -91,7 +91,6 @@ namespace Project1
                     if (sLevel[index] == 'M')
                     {
                         clam = new Clam(x * nTileWidth, y * nTileHeight, almejaTexture);
-                        elements.SetClam(clam);
                     }
                 }
             }
