@@ -67,6 +67,11 @@ namespace Project1
                 point.Render(spriteBatch);
         }
 
+        public void DeleteEntireRope()
+        {
+            Sticks.Clear();
+        }
+
         public void DeleteStick(VStk stick)
         {
             Sticks.Remove(stick);

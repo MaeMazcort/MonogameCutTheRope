@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Formats.Asn1.AsnWriter;
 using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -115,6 +116,27 @@ namespace Project1
                 isMousePressed = false;
             }
 
+            // Cut Ropes
+            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
+            Vector2 worldMousePosition = ConvertScreenToWorld(mousePosition);  // Asegúrate de que esta conversión toma en cuenta el desplazamiento de la cámara
+
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                if (!isMousePressed)
+                {
+                    isMousePressed = true;
+                    startMousePosition = worldMousePosition;
+                }
+                else
+                {
+                    CutRope(worldMousePosition);
+                }
+            }
+            else
+            {
+                isMousePressed = false;
+            }
+
             levelfinished = false;
 
             elements.Update(pantallaRect);
@@ -139,50 +161,46 @@ namespace Project1
 
             LevelChangeDetections(clam);
 
-            // Slice rope
-            // Handling Mouse Pressed
-            if (mouseState.LeftButton == ButtonState.Pressed && !isMousePressed)
-            {
-                isMousePressed = true;
-                Vector2 startPoint = new Vector2(mouseState.X, mouseState.Y);
-                slicePoints.Add(startPoint); // Add the starting point
-            }
-
-            // Handling Mouse Movement
-            if (isMousePressed)
-            {
-                Vector2 currentPoint = new Vector2(mouseState.X, mouseState.Y);
-                if (!slicePoints.Contains(currentPoint)) // To avoid adding duplicate points
-                {
-                    slicePoints.Add(currentPoint);
-                    if (slicePoints.Count > 1)
-                    {
-                        //IntersectionDetection(scene.Elements[0].stks, slicePoints);
-                        //IntersectionDetection(scene.Elements[0].rps, slicePoints);
-                    }
-
-                    if (slicePoints.Count > 100) // Control line length
-                    {
-                        slicePoints.RemoveAt(0); // Always remove the first added
-                    }
-                }
-            }
-
-            // Handling Mouse Released
-            if (mouseState.LeftButton == ButtonState.Released && isMousePressed)
-            {
-                isMousePressed = false;
-                mouseEnd = new Vector2(mouseState.X, mouseState.Y);
-
-                if (slicePoints.Count > 1)
-                {
-                    //IntersectionDetection(scene.Elements[0].rps, slicePoints);
-                }
-
-                slicePoints.Clear();
-            }
-
             base.Update(gameTime);
+        }
+
+        private void CutRope(Vector2 currentMousePosition)
+        {
+            // Itera sobre todas las cuerdas en una copia de la lista para evitar errores de modificación durante la iteración
+            foreach (var rope in elements.Rps.ToList())
+            {
+                foreach (var stick in rope.Sticks.ToList())
+                {
+                    // Verifica si la línea formada por el movimiento del mouse interseca este segmento de cuerda
+                    if (LineIntersects(stick.GetMidpoint(), startMousePosition, currentMousePosition))
+                    {
+                        rope.DeleteEntireRope(); // Elimina toda la cuerda
+                        break; // Rompe el ciclo interno para dejar de revisar más segmentos, ya que la cuerda se eliminará
+                    }
+                }
+            }
+            startMousePosition = currentMousePosition;  // Actualiza la posición de inicio para el próximo movimiento
+        }
+
+
+        // Implementa esta función según la necesidad de tu lógica de juego
+        public bool LineIntersects(Vector2 point, Vector2 lineStart, Vector2 lineEnd)
+        {
+            // Implementar un chequeo adecuado aquí
+            return Vector2.Distance(point, ClosestPointOnLine(point, lineStart, lineEnd)) < 20f;
+        }
+
+        // Esta función devuelve el punto más cercano en un segmento de línea a un punto dado
+        public Vector2 ClosestPointOnLine(Vector2 point, Vector2 lineStart, Vector2 lineEnd)
+        {
+            Vector2 lineVector = lineEnd - lineStart;
+            Vector2 projected = Vector2.Clamp(Vector2.Dot(point - lineStart, lineVector) / lineVector.LengthSquared() * lineVector + lineStart, lineStart, lineEnd);
+            return projected;
+        }
+
+        private Vector2 ConvertScreenToWorld(Vector2 screenPosition)
+        {
+            return new Vector2(screenPosition.X + cameraMono.position.X, screenPosition.Y + cameraMono.position.Y);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -209,7 +227,6 @@ namespace Project1
             }
             
             // Render ropes
-            
             if (!levelfinished && allowRendering)
             {
                 if (r == 0)
@@ -233,54 +250,16 @@ namespace Project1
                 }
             }
             
-            
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
         
-        private Vector2 ConvertScreenToWorld(Vector2 screenPoint)
+
+
+        private void IntersectionDetection(List<VRope> ropes, Vector2 mousePosition)
         {
-            // Calculate the ratio of the screen coordinates to the control size
-            float xRatio = screenPoint.X / (float)pantallaRect.X;
-            float yRatio = screenPoint.Y / (float)pantallaRect.Y;
-
-            // Use the ratio to calculate the world coordinates
-            float worldX = map.fOffsetX + xRatio * (map.nTileWidth * map.nVisibleTilesX);
-            float worldY = map.fOffsetY + yRatio * (map.nTileHeight * map.nVisibleTilesY);
-
-            return new Vector2(worldX, worldY);
-        }
-
-        
-        private void IntersectionDetection(List<VRope> ropes, List<Vector2> slicePts)
-        {
-            float intersectionRadius = 15;
-            bool ropeCut = false;
-
-            foreach (var rope in ropes)
-            {
-                foreach (var slicePoint in slicePts)
-                {
-                    foreach (var stick in rope.Sticks.ToList()) // Create a copy for safe modification
-                    {
-                        Vector2 worldPoint = ConvertScreenToWorld(slicePoint);
-                        float distance = DistanceBetweenPoints(worldPoint, stick.GetMidpoint());
-                        if (distance <= intersectionRadius)
-                        {
-                            rope.DeleteStick(stick); // Cut the rope
-                            ropeCut = true;
-                            break; // Exit the innermost loop
-                        }
-                    }
-
-                    if (ropeCut)
-                    {
-                        rope.DeleteCutVRope(); // Remove all sticks if one is cut
-                        return; // Exit the method after handling the cut
-                    }
-                }
-            }
+            //
         }
 
         private void RadiusIntersectionDetection(List<PinnedVpt> pinnedVpts, List<CandyVpt> candyVpts)
