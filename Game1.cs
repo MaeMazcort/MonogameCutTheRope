@@ -102,7 +102,7 @@ namespace Project1
             clamClosedTexture = Content.Load<Texture2D>("almejaTite");
             starTexture = Content.Load<Texture2D>("estrella");
             startPointTexture = Content.Load<Texture2D>("startVpt");
-            circle = Content.Load<Texture2D>("circulo");
+            circle = Content.Load<Texture2D>("radio");
             blowFishLeft = Content.Load<Texture2D>("pezGlobo2");
             blowFishRight = Content.Load<Texture2D>("pezGlobo");
 

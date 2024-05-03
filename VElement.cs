@@ -155,8 +155,8 @@ namespace Project1
                         new Rectangle((int)pndPts[p].Pos.X - 10, (int)(pndPts[p].Pos.Y - 10 - cameraMono.position.Y),
                             20, 20), Color.White);
                     _spriteBatch.Draw(circle,
-                        new Rectangle((int)pndPts[p].Pos.X - 70, (int)(pndPts[p].Pos.Y - 70 - cameraMono.position.Y),
-                            140, 140), Color.White);
+                        new Rectangle((int)pndPts[p].Pos.X - 100, (int)(pndPts[p].Pos.Y - 100 - cameraMono.position.Y),
+                            200, 200), Color.White);
                 }
             }
 
