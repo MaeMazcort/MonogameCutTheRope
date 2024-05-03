@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,16 @@ namespace Project1
 {
     public class SoundManager
     {
-        public static SoundEffect cut;
-        public static SoundEffect eat;
-        public static SoundEffect star;
-        public static SoundEffect grabPoint;
+        public static Song song;
 
-        public static SoundEffectInstance instanceCut;
-        public static SoundEffectInstance instanceEat;
-        public static SoundEffectInstance instanceStar;
-        public static SoundEffectInstance instanceGrabPoint;
+        public static SoundEffect cutSound;
+        public static SoundEffect eatSound;
+        public static SoundEffect starSound;
+        public static SoundEffect grabPointSound;
+
+        public static SoundEffectInstance instCut;
+        public static SoundEffectInstance instEat;
+        public static SoundEffectInstance instStar;
+        public static SoundEffectInstance instGrabPoint;
     }
 }
