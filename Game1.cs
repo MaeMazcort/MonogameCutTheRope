@@ -164,18 +164,16 @@ namespace Project1
 
         private void CutRope(Vector2 currentMousePosition)
         {
-            float tolerance = 10.0f; // Establece un radio de tolerancia adecuado para tu juego
+            float tolerance = 15.0f;
 
-            // Itera sobre todas las cuerdas en una copia de la lista para evitar errores de modificación durante la iteración
             foreach (var rope in elements.Rps.ToList())
             {
                 foreach (var stick in rope.Sticks.ToList())
                 {
-                    // Verifica si la línea formada por el movimiento del mouse interseca este segmento de cuerda
                     if (LineIntersects(stick.GetMidpoint(), startMousePosition, currentMousePosition, tolerance))
                     {
-                        rope.DeleteEntireRope(); // Elimina toda la cuerda
-                        break; // Rompe el ciclo interno para dejar de revisar más segmentos, ya que la cuerda se eliminará
+                        rope.DeleteEntireRope();
+                        break;
                     }
                 }
             }
