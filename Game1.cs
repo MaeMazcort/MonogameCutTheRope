@@ -234,7 +234,7 @@ namespace Project1
             }
 
             //Check for intersection between CandyVpt and PinnedVpt radius
-            RadiusIntersectionDetection(elements.pndPts, elements.cndPts);
+            RadiusIntersectionDetection(elements.pndPts);
 
             // Render ropes
             if (!levelfinished && allowRendering)
@@ -271,22 +271,19 @@ namespace Project1
             return (float)Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
         }
 
-        private void RadiusIntersectionDetection(List<PinnedVpt> pinnedVpts, List<CandyVpt> candyVpts)
+        private void RadiusIntersectionDetection(List<PinnedVpt> pinnedVpts)
         {
             foreach (var pinnedPt in pinnedVpts)
             {
-                foreach (var candyPt in candyVpts)
-                {
-                    if (candyPt.Pos.Distance(pinnedPt.Pos) <= pinnedPt.Radius)
+                    if (candy.Pos.Distance(pinnedPt.Pos) <= pinnedPt.Radius)
                     {
                         if (pinnedPt.Available)
                         {
-                            VRope rope = new VRope(pinnedPt, candyPt, 15, pinnedPt.Level);
+                            VRope rope = new VRope(pinnedPt, candy, 15, pinnedPt.Level);
                             elements.AddRope(rope);
                             pinnedPt.Available = false;
                         }
                     }
-                }
             }
         }
 
