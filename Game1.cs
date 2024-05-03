@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using Project1;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using static System.Formats.Asn1.AsnWriter;
 using Color = Microsoft.Xna.Framework.Color;
@@ -23,6 +25,9 @@ namespace Project1
         VElement elements;
         Clam clam;
         public Camera cameraMono;
+
+        private List<Vector2> slicePoints = new List<Vector2>();
+        public int r;
         private float fishSpeed = 1f;
         private float bubbleSpeed = 1f;
         int parallaxHeight = 1000;
@@ -93,6 +98,7 @@ namespace Project1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             SpriteBatchExtensions.Initialize(GraphicsDevice);
 
+            // Elements
             pearlTexture = Content.Load<Texture2D>("perla");
             clamTexture = Content.Load<Texture2D>("almeja");
             clamClosedTexture = Content.Load<Texture2D>("almejaTite");
@@ -102,10 +108,24 @@ namespace Project1
             blowFishLeft = Content.Load<Texture2D>("pezGlobo2");
             blowFishRight = Content.Load<Texture2D>("pezGlobo");
 
+            // Background
             backgroundLayer1 = Content.Load<Texture2D>("fondo0");
             backgroundLayer2 = Content.Load<Texture2D>("rocaArriba");
             fishesParallax = Content.Load<Texture2D>("pecesParallax");
             bubblesParralax = Content.Load<Texture2D>("burbujasParallax");
+
+            //Sounds
+            //SoundManager.song = Content.Load<Song>("musicaFondo");
+
+            SoundManager.eatSound = Content.Load<SoundEffect>("eat");
+            SoundManager.cutSound = Content.Load<SoundEffect>("cut");
+            SoundManager.starSound = Content.Load<SoundEffect>("star");
+            SoundManager.grabPointSound = Content.Load<SoundEffect>("grabPoint");
+
+            SoundManager.instEat = SoundManager.eatSound.CreateInstance();
+            SoundManager.instCut = SoundManager.cutSound.CreateInstance();
+            SoundManager.instStar = SoundManager.starSound.CreateInstance();
+            SoundManager.instGrabPoint = SoundManager.grabPointSound.CreateInstance();
 
             fishPosition = new Vector2(0, 0);
             fishPosition2 = new Vector2(parallaxWidth, 0);
@@ -208,6 +228,11 @@ namespace Project1
                 {
                     if (LineIntersects(stick.GetMidpoint(), startMousePosition, currentMousePosition, tolerance))
                     {
+
+                        // Play sound
+                        SoundManager.instCut.Pan = 1;
+                        SoundManager.instCut.Volume = 1f;
+                        SoundManager.instCut.Play();
                         rope.DeleteEntireRope();
                         break;
                     }
@@ -276,6 +301,10 @@ namespace Project1
                     {
                         if (pinnedPt.Available)
                         {
+                            // Play sound
+                            SoundManager.instGrabPoint.Pan = 1;
+                            SoundManager.instGrabPoint.Volume = 1f;
+                            SoundManager.instGrabPoint.Play();
                             VRope rope = new VRope(pinnedPt, candy, 15, pinnedPt.Level);
                             elements.AddRope(rope);
                             pinnedPt.Available = false;
@@ -295,6 +324,11 @@ namespace Project1
                     star.CheckCollision(candy);
                     if (star.IsCollected)
                     {
+                        // Play sound
+                        SoundManager.instStar.Pan = 1;
+                        SoundManager.instStar.Volume = 1f;
+                        SoundManager.instStar.Play();
+
                         map.score += 10; // Add points when the star is collected
                         collectedStars.Add(star);
                     }
@@ -315,6 +349,11 @@ namespace Project1
             {
                 if (clam.AteCandy(elements.cndPts[i]))
                 {
+                    // Play sound
+                    SoundManager.instEat.Pan = 1;
+                    SoundManager.instEat.Volume = 1f;
+                    SoundManager.instEat.Play();
+
                     map.score += 100;
                     if (currentLevel == 3)
                     {
