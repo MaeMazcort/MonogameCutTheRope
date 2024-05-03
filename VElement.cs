@@ -128,21 +128,21 @@ namespace Project1
             for (int p = 0; p < rps.Count; p++)
             {
                 if (rps[p].Level == currentLevel)
-                    rps[p].Render(_spriteBatch, pantallaRect);
+                    rps[p].Render(_spriteBatch, pantallaRect, cameraMono);
             }
 
             // Render points
             for (int p = 0; p < pts.Count; p++)
             {
                 if (pts[p].Level == currentLevel && !(pts[p] is CandyVpt))
-                    _spriteBatch.Draw(startPointTexture, new Rectangle((int)pts[p].Pos.X - 8, (int)(pts[p].Pos.Y - 10 - cameraMono.position.Y), 20, 20), Color.White);
+                    _spriteBatch.Draw(startPointTexture, new Rectangle((int)pts[p].Pos.X - 10, (int)(pts[p].Pos.Y - 10 - cameraMono.position.Y), 20, 20), Color.White);
             }
 
             // Render pearl
             for (int p = 0; p < cndPts.Count; p++)
             {
                 if (cndPts[p].Level == currentLevel)
-                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)cndPts[p].Pos.X - 15, (int)(cndPts[p].Pos.Y - 20 - cameraMono.position.Y), 40, 40), Color.White);
+                    _spriteBatch.Draw(pearlTexture, new Rectangle((int)cndPts[p].Pos.X - 20, (int)(cndPts[p].Pos.Y - 20 - cameraMono.position.Y), 40, 40), Color.White);
             }
 
             // Render pinnedPoints

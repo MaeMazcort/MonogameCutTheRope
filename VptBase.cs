@@ -122,9 +122,9 @@ namespace Project1
             DetectCollision(pts);
             Constraints(space);
         }
-        public void Render(SpriteBatch spriteBatch)
+        public void Render(SpriteBatch spriteBatch, Camera camera)
         {
-            Rectangle destRect = new Rectangle((int)(Pos.X - r), (int)(Pos.Y - r), (int)d, (int)d);
+            Rectangle destRect = new Rectangle((int)(Pos.X - r), (int)(Pos.Y - r - camera.position.Y), (int)d, (int)d);
             spriteBatch.FillEllipse(Color.White, destRect);
         }
     }

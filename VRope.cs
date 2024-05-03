@@ -56,15 +56,15 @@ namespace Project1
 
         }
 
-        public void Render(SpriteBatch spriteBatch, Rectangle space)
+        public void Render(SpriteBatch spriteBatch, Rectangle space, Camera camera)
         {
             // Render each stick
             foreach (var stick in Sticks)
-                stick.Render(spriteBatch, space);
+                stick.Render(spriteBatch, camera);
 
             // Render each point
             foreach (var point in Points)
-                point.Render(spriteBatch);
+                point.Render(spriteBatch, camera);
         }
 
         public void DeleteEntireRope()

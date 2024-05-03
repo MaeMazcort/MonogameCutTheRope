@@ -48,11 +48,11 @@ namespace Project1
             }
         }
 
-        public void Render(SpriteBatch spriteBatch, Rectangle space)
+        public void Render(SpriteBatch spriteBatch, Camera camera)
         {
             //Update();
-            Vector2 startPoint = new Vector2(a.Pos.X, a.Pos.Y);
-            Vector2 endPoint = new Vector2(b.Pos.X, b.Pos.Y);
+            Vector2 startPoint = new Vector2(a.Pos.X, a.Pos.Y - camera.position.Y);
+            Vector2 endPoint = new Vector2(b.Pos.X, b.Pos.Y - camera.position.Y);
             spriteBatch.DrawLine(startPoint, endPoint, color);
         }
 
