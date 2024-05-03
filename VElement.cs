@@ -127,7 +127,7 @@ namespace Project1
 
         public void Render(SpriteBatch _spriteBatch, Rectangle pantallaRect, int currentLevel, Texture2D pearlTexture,
             Texture2D starTexture, Texture2D clamTexture, Texture2D startPointTexture, Texture2D clamClosedTexture,
-            Texture2D circle, Camera cameraMono)
+            Texture2D circle, Texture2D blowerleft, Texture2D blowerright, Camera cameraMono)
         {
             // Render ropes
 
@@ -195,7 +195,15 @@ namespace Project1
             //Render influencers
             for (int i = 0; i < Influencers.Count; i++)
             {
-                _spriteBatch.Draw(starTexture, new Rectangle((int)(Influencers[i].Position.X-35), (int)(Influencers[i].Position.Y - 35 - cameraMono.position.Y), 70, 70), Color.White);
+                if (Influencers[i].Direction.X == 1)
+                {
+                    _spriteBatch.Draw(blowerright, new Rectangle((int)(Influencers[i].Position.X - 35), (int)(Influencers[i].Position.Y - 35 - cameraMono.position.Y), 70, 70), Color.White);
+                }
+                else
+                {
+                    _spriteBatch.Draw(blowerleft, new Rectangle((int)(Influencers[i].Position.X - 35), (int)(Influencers[i].Position.Y - 35 - cameraMono.position.Y), 70, 70), Color.White);
+
+                }
             }
             
         }

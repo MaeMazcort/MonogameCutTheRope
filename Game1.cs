@@ -288,7 +288,7 @@ namespace Project1
             _spriteBatch.Draw(fishesParallax, new Rectangle((int)fishPosition2.X, (int)fishPosition2.Y, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
             _spriteBatch.Draw(backgroundLayer2, new Rectangle(0, -(int)cameraMono.position.Y / 10, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
 
-            elements.Render(_spriteBatch, pantallaRect, currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, clamClosedTexture, circle, cameraMono);
+            elements.Render(_spriteBatch, pantallaRect, currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, clamClosedTexture, circle, blowFishLeft, blowFishRight,cameraMono);
 
             // Draw a line in the cut
             if (isMousePressed)
