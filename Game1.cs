@@ -180,15 +180,11 @@ namespace Project1
             }
         }
 
-
-        // Implementa esta función según la necesidad de tu lógica de juego
         public bool LineIntersects(Vector2 point, Vector2 lineStart, Vector2 lineEnd)
         {
-            // Implementar un chequeo adecuado aquí
             return Vector2.Distance(point, ClosestPointOnLine(point, lineStart, lineEnd)) < 20f;
         }
 
-        // Esta función devuelve el punto más cercano en un segmento de línea a un punto dado
         public Vector2 ClosestPointOnLine(Vector2 point, Vector2 lineStart, Vector2 lineEnd)
         {
             Vector2 lineVector = lineEnd - lineStart;
