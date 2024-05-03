@@ -2,14 +2,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System.Xml.Linq;
-using System;
 
 namespace Project1
 {
     public class VElement
     {
-        private int p, l;
+        private int p;
         public List<VptBase> pts;
         public List<StartVpt> strtPts;
         public List<CandyVpt> cndPts;
@@ -18,7 +16,6 @@ namespace Project1
         public List<VStk> stks;
         public List<Star> strs;
 
-        public Map map { get; set; }
         public List<WindInfluencer> Influencers { get; set; }
 
         public VElement()
@@ -34,15 +31,9 @@ namespace Project1
             Influencers = new List<WindInfluencer>();
         }
 
-        public List<VptBase> Pts => pts;
-        public List<StartVpt> startVpts => strtPts;
-        public List<CandyVpt> CandyVpts => cndPts;
-        public List<PinnedVpt> PinnedVpts => pndPts;
-        public List<Star> Stars => strs;
         public List<VRope> Rps => rps;
 
         public Clam clam { get; set; }
-        public Texture2D Texture { get; set; } // Unused?
         public int clamState;
 
         public void SetClam(Clam clam)
@@ -206,17 +197,6 @@ namespace Project1
                 }
             }
             
-        }
-
-        public void ClearAllLists()
-        {
-            pts.Clear();        // Clears the list of VptBase points
-            strtPts.Clear();    // Clears the list of StartVpt points
-            cndPts.Clear();     // Clears the list of CandyVpt points
-            pndPts.Clear();     // Clears the list of PinnedVpt points
-            rps.Clear();        // Clears the list of VRope ropes
-            stks.Clear();       // Clears the list of VStk sticks
-            strs.Clear();       // Clears the list of Star stars
         }
     }
     

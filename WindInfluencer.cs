@@ -1,4 +1,3 @@
-using System.Drawing;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Project1;

@@ -68,11 +68,5 @@ namespace Project1
         {
             Sticks.Clear();
         }
-
-        public void DeleteStick(VStk stick)
-        {
-            Sticks.Remove(stick);
-        }
-
     }
 }
