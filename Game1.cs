@@ -225,10 +225,10 @@ namespace Project1
             _spriteBatch.Begin();
 
             // Parallax
-            _spriteBatch.Draw(backgroundLayer1, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
-            _spriteBatch.Draw(bubblesParralax, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
-            _spriteBatch.Draw(fishesParallax, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
-            _spriteBatch.Draw(backgroundLayer2, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+            _spriteBatch.Draw(backgroundLayer1, new Rectangle(0, -(int)cameraMono.position.Y / 10, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
+            _spriteBatch.Draw(bubblesParralax, new Rectangle(0, -(int)cameraMono.position.Y / 10, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
+            _spriteBatch.Draw(fishesParallax, new Rectangle(-(int)cameraMono.position.Y / 10, 0, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
+            //_spriteBatch.Draw(backgroundLayer2, new Rectangle(0, -(int)cameraMono.position.Y / 10, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
 
             elements.Render(_spriteBatch, pantallaRect, map.currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, cameraMono);
 

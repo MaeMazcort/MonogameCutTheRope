@@ -31,7 +31,7 @@ namespace Project1
         public void CheckCollision(CandyVpt candy)
         {
             float distance = Distance(Position, new PointF(candy.Pos.X, candy.Pos.Y));
-            if (distance < 20)  // Assuming the radius for collision detection is 20
+            if (distance < 30)  // Assuming the radius for collision detection is 20
             {
                 IsCollected = true;
             }

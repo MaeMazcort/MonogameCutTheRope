@@ -20,7 +20,7 @@ namespace Project1
         {
             this.a = a;
             this.b = b;
-            stiff = 20f;
+            stiff = 15f;
             damp = 0.05f;
             length = Vector2.Distance(new Vector2(a.Pos.X, a.Pos.Y), new Vector2(b.Pos.X, b.Pos.Y));
             color = Color.SaddleBrown;
