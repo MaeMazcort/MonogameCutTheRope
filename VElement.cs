@@ -207,17 +207,6 @@ namespace Project1
             }
             
         }
-
-        public void ClearAllLists()
-        {
-            pts.Clear();        // Clears the list of VptBase points
-            strtPts.Clear();    // Clears the list of StartVpt points
-            cndPts.Clear();     // Clears the list of CandyVpt points
-            pndPts.Clear();     // Clears the list of PinnedVpt points
-            rps.Clear();        // Clears the list of VRope ropes
-            stks.Clear();       // Clears the list of VStk sticks
-            strs.Clear();       // Clears the list of Star stars
-        }
     }
     
 }
