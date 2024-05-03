@@ -197,11 +197,11 @@ namespace Project1
             {
                 if (Influencers[i].Direction.X == 1)
                 {
-                    _spriteBatch.Draw(blowerright, new Rectangle((int)(Influencers[i].Position.X - 35), (int)(Influencers[i].Position.Y - 35 - cameraMono.position.Y), 70, 70), Color.White);
+                    _spriteBatch.Draw(blowerright, new Rectangle((int)(Influencers[i].Position.X - 40), (int)(Influencers[i].Position.Y - 40 - cameraMono.position.Y), 80, 80), Color.White);
                 }
                 else
                 {
-                    _spriteBatch.Draw(blowerleft, new Rectangle((int)(Influencers[i].Position.X - 35), (int)(Influencers[i].Position.Y - 35 - cameraMono.position.Y), 70, 70), Color.White);
+                    _spriteBatch.Draw(blowerleft, new Rectangle((int)(Influencers[i].Position.X - 40), (int)(Influencers[i].Position.Y - 40 - cameraMono.position.Y), 80, 80), Color.White);
 
                 }
             }
