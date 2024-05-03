@@ -122,19 +122,21 @@ namespace Project1
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
+                Vector2 currentMousePosition = ConvertScreenToWorld(new Vector2(mouseState.X, mouseState.Y));
                 if (!isMousePressed)
                 {
                     isMousePressed = true;
                 }
                 else
                 {
-                    CutRope(worldMousePosition);
+                    CutRope(currentMousePosition);
                 }
             }
             else
             {
                 isMousePressed = false;
             }
+
 
             levelfinished = false;
 
@@ -162,13 +164,15 @@ namespace Project1
 
         private void CutRope(Vector2 currentMousePosition)
         {
+            float tolerance = 10.0f; // Establece un radio de tolerancia adecuado para tu juego
+
             // Itera sobre todas las cuerdas en una copia de la lista para evitar errores de modificación durante la iteración
             foreach (var rope in elements.Rps.ToList())
             {
                 foreach (var stick in rope.Sticks.ToList())
                 {
                     // Verifica si la línea formada por el movimiento del mouse interseca este segmento de cuerda
-                    if (LineIntersects(stick.GetMidpoint(), startMousePosition, currentMousePosition))
+                    if (LineIntersects(stick.GetMidpoint(), startMousePosition, currentMousePosition, tolerance))
                     {
                         rope.DeleteEntireRope(); // Elimina toda la cuerda
                         break; // Rompe el ciclo interno para dejar de revisar más segmentos, ya que la cuerda se eliminará
@@ -177,17 +181,29 @@ namespace Project1
             }
         }
 
-        public bool LineIntersects(Vector2 point, Vector2 lineStart, Vector2 lineEnd)
+
+        public bool LineIntersects(Vector2 point, Vector2 lineStart, Vector2 lineEnd, float radius)
         {
-            return Vector2.Distance(point, ClosestPointOnLine(point, lineStart, lineEnd)) < 20f;
+            Vector2 closest = ClosestPointOnLine(lineStart, lineEnd, point);
+            return Vector2.DistanceSquared(closest, point) <= radius * radius;
         }
 
-        public Vector2 ClosestPointOnLine(Vector2 point, Vector2 lineStart, Vector2 lineEnd)
+
+
+        public Vector2 ClosestPointOnLine(Vector2 lineStart, Vector2 lineEnd, Vector2 point)
         {
-            Vector2 lineVector = lineEnd - lineStart;
-            Vector2 projected = Vector2.Clamp(Vector2.Dot(point - lineStart, lineVector) / lineVector.LengthSquared() * lineVector + lineStart, lineStart, lineEnd);
-            return projected;
+            Vector2 AP = point - lineStart;       // Vector from lineStart to point
+            Vector2 AB = lineEnd - lineStart;     // Vector from lineStart to lineEnd
+            float abSquared = AB.LengthSquared(); // Distance squared from lineStart to lineEnd
+            if (abSquared == 0) return lineStart; // lineStart and lineEnd are the same point
+
+            float abDotAp = Vector2.Dot(AP, AB);  // Dot product of AP and AB
+            float t = abDotAp / abSquared;        // The normalized "distance" from lineStart to the closest point
+
+            t = MathHelper.Clamp(t, 0, 1);        // Clamp t to the range [0,1]
+            return lineStart + t * AB;            // Compute the closest point
         }
+
 
         private Vector2 ConvertScreenToWorld(Vector2 screenPosition)
         {
