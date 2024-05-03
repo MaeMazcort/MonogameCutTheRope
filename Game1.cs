@@ -25,9 +25,6 @@ namespace Project1
         VElement elements;
         Clam clam;
         public Camera cameraMono;
-
-        private List<Vector2> slicePoints = new List<Vector2>();
-        public int r;
         private float fishSpeed = 1f;
         private float bubbleSpeed = 1f;
         int parallaxHeight = 1000;
