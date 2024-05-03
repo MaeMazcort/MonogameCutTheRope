@@ -14,6 +14,7 @@ namespace Project1
     {
         public Vector2 Position { get; set; }
         public Texture2D Texture { get; set; }
+        public bool openMouth = false;
 
 
         public Clam(float x, float y, Texture2D texture)
@@ -28,6 +29,11 @@ namespace Project1
             if (distance < 25)
             {
                 return true;
+            }
+
+            if (distance < 200)
+            {
+                openMouth = true;
             }
 
             return false;

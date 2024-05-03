@@ -54,7 +54,7 @@ namespace Project1
         {
             this.clam = clam;
             clamState = 1;
-
+            this.clam.openMouth = false;
         }
 
         public void SetMap(Map map)
@@ -108,8 +108,8 @@ namespace Project1
                     pts[p].Update2(space, pts);
                 }
             }
-            // Update ropes
 
+            // Update ropes
             for (p = 0; p < rps.Count; p++)
             {
                 if (rps[p].Level == 1)
@@ -121,7 +121,7 @@ namespace Project1
 
 
 
-        public void Render(SpriteBatch _spriteBatch, Rectangle pantallaRect, int currentLevel, Texture2D pearlTexture, Texture2D starTexture, Texture2D clamTexture, Texture2D startPointTexture, Camera cameraMono)
+        public void Render(SpriteBatch _spriteBatch, Rectangle pantallaRect, int currentLevel, Texture2D pearlTexture, Texture2D starTexture, Texture2D clamTexture, Texture2D startPointTexture, Texture2D clamClosedTexture, Camera cameraMono)
         {
             // Render ropes
 
@@ -167,7 +167,10 @@ namespace Project1
             // Render clam
             if (clamState == 1)
             {
-                _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30 - cameraMono.position.Y), 70, 70), Color.White);
+                if (this.clam.openMouth)
+                    _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30 - cameraMono.position.Y), 70, 70), Color.White);
+                else
+                    _spriteBatch.Draw(clamClosedTexture, new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30 - cameraMono.position.Y), 70, 40), Color.White);
             }
         }
     }

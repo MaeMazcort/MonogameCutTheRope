@@ -83,6 +83,7 @@ namespace Project1
 
             pearlTexture = Content.Load<Texture2D>("perla");
             clamTexture = Content.Load<Texture2D>("almeja");
+            clamClosedTexture = Content.Load<Texture2D>("almejaTite");
             starTexture = Content.Load<Texture2D>("estrella");
             startPointTexture = Content.Load<Texture2D>("startVpt");
             backgroundLayer1 = Content.Load<Texture2D>("fondo0");
@@ -240,7 +241,7 @@ namespace Project1
             _spriteBatch.Draw(fishesParallax, new Rectangle((int)fishPosition.Y, 0, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
             _spriteBatch.Draw(backgroundLayer2, new Rectangle(0, -(int)cameraMono.position.Y / 10, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
 
-            elements.Render(_spriteBatch, pantallaRect, map.currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, cameraMono);
+            elements.Render(_spriteBatch, pantallaRect, map.currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, clamClosedTexture, cameraMono);
 
             // Draw a line in the cut
             if (isMousePressed)
