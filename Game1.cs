@@ -33,6 +33,7 @@ namespace Project1
         int parallaxHeight = 1000;
         int parallaxWidth = 1400;
         public int w, h, currentLevel = 1;
+        KeyboardState keyboardState;
 
         Rectangle pantallaRect;
 
@@ -90,6 +91,9 @@ namespace Project1
         {
             Init();
 
+            // Configura MediaPlayer para repetir la canción
+            MediaPlayer.IsRepeating = true;
+
             base.Initialize();
         }
 
@@ -115,7 +119,7 @@ namespace Project1
             bubblesParralax = Content.Load<Texture2D>("burbujasParallax");
 
             //Sounds
-            //SoundManager.song = Content.Load<Song>("musicaFondo");
+            SoundManager.song = Content.Load<Song>("Burbujas");
 
             SoundManager.eatSound = Content.Load<SoundEffect>("eat");
             SoundManager.cutSound = Content.Load<SoundEffect>("cut");
@@ -139,6 +143,18 @@ namespace Project1
             // Default in Monogame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            // Play and stop sound
+            keyboardState = Keyboard.GetState();
+
+            if( keyboardState.IsKeyDown(Keys.Up) )
+            {
+                SoundManager.PlaySong();
+            }
+            if(keyboardState.IsKeyDown(Keys.Down))
+            {
+                SoundManager.StopSong();
+            }
 
             // Draw a line with the mouse
             MouseState mouseState = Mouse.GetState();

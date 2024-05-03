@@ -55,6 +55,12 @@
 /processorParam:DebugMode=Auto
 /build:Blue.fx
 
+#begin Burbujas.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Burbujas.mp3
+
 #begin burbujasParallax.png
 /importer:TextureImporter
 /processor:TextureProcessor
