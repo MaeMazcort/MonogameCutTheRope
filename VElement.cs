@@ -157,7 +157,6 @@ namespace Project1
                     _spriteBatch.Draw(circle,
                         new Rectangle((int)pndPts[p].Pos.X - 70, (int)(pndPts[p].Pos.Y - 70 - cameraMono.position.Y),
                             140, 140), Color.White);
-                    pndPts[p].RenderRadius(_spriteBatch);
                 }
             }
 
