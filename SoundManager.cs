@@ -21,5 +21,21 @@ namespace Project1
         public static SoundEffectInstance instEat;
         public static SoundEffectInstance instStar;
         public static SoundEffectInstance instGrabPoint;
+
+        public static void PlaySong()
+        {
+            if(MediaPlayer.State != MediaState.Playing && MediaPlayer.GameHasControl)
+            {
+                MediaPlayer.Play(song);
+            }
+        }
+
+        public static void StopSong()
+        {
+            if(MediaPlayer.State == MediaState.Playing && MediaPlayer.GameHasControl)
+            {
+                MediaPlayer.Stop();
+            }
+        }
     }
 }
