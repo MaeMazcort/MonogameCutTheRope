@@ -26,6 +26,7 @@ namespace Project1
         public List<Star> strs;
 
         public Map map { get; set; }
+        public List<WindInfluencer> Influencers { get; set; }
 
         public VElement()
         {
@@ -37,6 +38,7 @@ namespace Project1
             rps = new List<VRope>();
             stks = new List<VStk>();
             strs = new List<Star>();
+            Influencers = new List<WindInfluencer>();
         }
 
         public List<VptBase> Pts => pts;
@@ -94,6 +96,11 @@ namespace Project1
             strs.Add(str);
         }
 
+        public void AddInfluencer(WindInfluencer influencer)
+        {
+            Influencers.Add(influencer);
+        }
+
         public void Update(Rectangle space)
         {
             // Update points
@@ -117,9 +124,20 @@ namespace Project1
                     rps[p].Update(space);
                 }
             }
+            
+            //Update influencers
+            foreach (var pearl in cndPts)
+            {
+                foreach (var influencer in Influencers)
+                {
+                    V2 force = influencer.GetForce(pearl);
+                    pearl.ApplyForce(force);
+                }
+                
+                // Update particle state
+                pearl.Update(space);
+            }
         }
-
-
 
         public void Render(SpriteBatch _spriteBatch, Rectangle pantallaRect, int currentLevel, Texture2D pearlTexture, Texture2D starTexture, Texture2D clamTexture, Texture2D startPointTexture, Texture2D clamClosedTexture, Texture2D circle, Camera cameraMono)
         {
@@ -172,6 +190,13 @@ namespace Project1
                 else
                     _spriteBatch.Draw(clamClosedTexture, new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30 - cameraMono.position.Y), 70, 40), Color.White);
             }
+            
+            //Render influencers
+            for (int i = 0; i < Influencers.Count; i++)
+            {
+                _spriteBatch.Draw(starTexture, new Rectangle((int)(Influencers[i].Position.X-35), (int)(Influencers[i].Position.Y - 35 ), 70, 70), Color.White);
+            }
+
         }
     }
 }

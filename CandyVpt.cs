@@ -1,16 +1,11 @@
 ﻿// Status: Completed. Check Texture instead of Image
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
+using Color = Microsoft.Xna.Framework.Color;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Project1
 {
-    public class CandyVpt : VptBase
+    public class CandyVpt : VptBase, IParticle
     {
         public Texture2D Texture { get; set; }
 
@@ -21,6 +16,11 @@ namespace Project1
             Texture = texture;
         }
 
+
+        public void Update(Rectangle space)
+        {
+            base.Update(space);
+        }
 
         public void ApplyForce(V2 force)
         {
