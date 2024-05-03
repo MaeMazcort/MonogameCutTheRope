@@ -1,17 +1,6 @@
 ﻿// Status: Completed. Check the missing bmp and g
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using System.Net.NetworkInformation;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
-using System.Security.Cryptography;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace Project1
 {
