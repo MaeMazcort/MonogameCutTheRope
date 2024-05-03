@@ -14,7 +14,7 @@ namespace Project1
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        Texture2D pearlTexture, clamTexture,starTexture, startPointTexture, backgroundLayer1, bubblesParralax, fishesParallax, backgroundLayer2;
+        Texture2D clamClosedTexture, pearlTexture, clamTexture,starTexture, startPointTexture, backgroundLayer1, bubblesParralax, fishesParallax, backgroundLayer2;
 
         public Map map;
         CandyVpt candy;
