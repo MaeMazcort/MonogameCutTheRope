@@ -177,7 +177,6 @@ namespace Project1
                     {
                         case '.':
                             break;
-
                         case 'S':
                             var star1 = new Star(x * nTileWidth, y * nTileHeight, currentLevel, estrellaTexture);
                             elements.AddStar(star1);
@@ -193,6 +192,13 @@ namespace Project1
                             elements.AddPoint(pinnedpoint);
                             elements.AddPinnedPoint(pinnedpoint);
                             id++;
+                            break;
+                        case 'I': //Influencer
+                            var influencerPosition = new V2(x * nTileWidth, y * nTileHeight);
+                            float strength = 10;  
+                            float velocity = 5;  
+                            var windInfluencer = new WindInfluencer(influencerPosition, strength, velocity,size);
+                           elements.AddInfluencer(windInfluencer);
                             break;
                     }
                 }
