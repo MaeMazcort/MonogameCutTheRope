@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Project1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +24,9 @@ namespace Project1
         VElement elements;
         Clam clam;
         public Camera cameraMono;
+
+        private List<Vector2> slicePoints = new List<Vector2>();
+        public int r, w, h;
         private float fishSpeed = 1f;
         private float bubbleSpeed = 1f;
         int parallaxHeight = 1000;
@@ -92,6 +97,7 @@ namespace Project1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             SpriteBatchExtensions.Initialize(GraphicsDevice);
 
+            // Elements
             pearlTexture = Content.Load<Texture2D>("perla");
             clamTexture = Content.Load<Texture2D>("almeja");
             clamClosedTexture = Content.Load<Texture2D>("almejaTite");
@@ -101,10 +107,22 @@ namespace Project1
             blowFishLeft = Content.Load<Texture2D>("pezGlobo2");
             blowFishRight = Content.Load<Texture2D>("pezGlobo");
 
+            // Background
             backgroundLayer1 = Content.Load<Texture2D>("fondo0");
             backgroundLayer2 = Content.Load<Texture2D>("rocaArriba");
             fishesParallax = Content.Load<Texture2D>("pecesParallax");
             bubblesParralax = Content.Load<Texture2D>("burbujasParallax");
+
+            //Sounds
+            eatSound = Content.Load<SoundEffect>("eat");
+            cutSound = Content.Load<SoundEffect>("cut");
+            starSound = Content.Load<SoundEffect>("star");
+            grabPointSound = Content.Load<SoundEffect>("grabPoint");
+
+            instEat = eatSound.CreateInstance();
+            instCut = cutSound.CreateInstance();
+            instStar = starSound.CreateInstance();
+            instGrabPoint = grabPointSound.CreateInstance();
 
             fishPosition = new Vector2(0, 0);
             fishPosition2 = new Vector2(parallaxWidth, 0);
@@ -207,6 +225,11 @@ namespace Project1
                 {
                     if (LineIntersects(stick.GetMidpoint(), startMousePosition, currentMousePosition, tolerance))
                     {
+
+                        // Play sound
+                        instCut.Pan = 1;
+                        instCut.Volume = 0.5f;
+                        instCut.Play();
                         rope.DeleteEntireRope();
                         break;
                     }
@@ -293,6 +316,10 @@ namespace Project1
                     {
                         if (pinnedPt.Available)
                         {
+                            // Play sound
+                            instGrabPoint.Pan = 1;
+                            instGrabPoint.Volume = 0.5f;
+                            instGrabPoint.Play();
                             VRope rope = new VRope(pinnedPt, candy, 15, pinnedPt.Level);
                             elements.AddRope(rope);
                             pinnedPt.Available = false;
@@ -312,6 +339,11 @@ namespace Project1
                     star.CheckCollision(candy);
                     if (star.IsCollected)
                     {
+                        // Play sound
+                        instStar.Pan = 1;
+                        instStar.Volume = 0.5f;
+                        instStar.Play();
+
                         map.score += 10; // Add points when the star is collected
                         collectedStars.Add(star);
                     }
@@ -332,6 +364,11 @@ namespace Project1
             {
                 if (clam.AteCandy(elements.cndPts[i]))
                 {
+                    // Play sound
+                    instEat.Pan = 1;
+                    instEat.Volume = 0.5f;
+                    instEat.Play();
+
                     map.score += 100;
                     if (currentLevel == 3)
                     {
