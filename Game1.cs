@@ -26,12 +26,23 @@ namespace Project1
         public Camera cameraMono;
 
         private List<Vector2> slicePoints = new List<Vector2>();
-        public int r, w, h;
+        public int r;
         private float fishSpeed = 1f;
         private float bubbleSpeed = 1f;
         int parallaxHeight = 1000;
         int parallaxWidth = 1400;
         public int w, h, currentLevel = 1;
+
+        // Sounds
+        SoundEffect eatSound;
+        SoundEffect cutSound;
+        SoundEffect grabPointSound;
+        SoundEffect starSound;
+
+        SoundEffectInstance instEat;
+        SoundEffectInstance instCut;
+        SoundEffectInstance instGrabPoint;
+        SoundEffectInstance instStar;
 
         Rectangle pantallaRect;
 
