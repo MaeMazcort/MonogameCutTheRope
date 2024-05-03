@@ -50,10 +50,10 @@ namespace Project1
             sLevel += "....................."; // 10
             sLevel += ".....................";
             sLevel += ".....................";
-            sLevel += "..........S..........";
+            sLevel += "............S........";
             sLevel += ".....................";
             sLevel += ".....................";
-            sLevel += "..........P..........";
+            sLevel += "............P........";
             sLevel += ".....................";
             sLevel += ".....................";
             sLevel += ".....................";
@@ -114,7 +114,7 @@ namespace Project1
                             id++;
                             break;
                         case 'P':
-                            var pinnedpoint = new PinnedVpt(x * nTileWidth, y * nTileHeight, id, 30, true, level: 1);
+                            var pinnedpoint = new PinnedVpt(x * nTileWidth, y * nTileHeight, id, 140, true, level: 1);
                             elements.AddPoint(pinnedpoint);
                             elements.AddPinnedPoint(pinnedpoint);
                             id++;

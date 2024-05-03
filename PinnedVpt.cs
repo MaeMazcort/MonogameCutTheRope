@@ -7,7 +7,7 @@ namespace Project1
 {
     public class PinnedVpt : VptBase
     {
-        public PinnedVpt(float x, float y, int id, int radius, bool available, int level) : base(x, y, id, true, Color.CornflowerBlue, 10f, level)
+        public PinnedVpt(float x, float y, int id, int radius, bool available, int level) : base(x, y, id, true, Color.CornflowerBlue, radius, level)
         {
             Radius = radius;
             Available = available;
