@@ -14,7 +14,8 @@ namespace Project1
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        Texture2D clamClosedTexture, pearlTexture, clamTexture,starTexture, startPointTexture, backgroundLayer1, bubblesParralax, fishesParallax, backgroundLayer2;
+        Texture2D clamClosedTexture, pearlTexture, clamTexture, starTexture, startPointTexture, circle;
+        Texture2D backgroundLayer1, bubblesParralax, fishesParallax, backgroundLayer2;
 
         public Map map;
         CandyVpt candy;
@@ -88,6 +89,8 @@ namespace Project1
             clamClosedTexture = Content.Load<Texture2D>("almejaTite");
             starTexture = Content.Load<Texture2D>("estrella");
             startPointTexture = Content.Load<Texture2D>("startVpt");
+            circle = Content.Load<Texture2D>("circulo");
+
             backgroundLayer1 = Content.Load<Texture2D>("fondo0");
             backgroundLayer2 = Content.Load<Texture2D>("rocaArriba");
             fishesParallax = Content.Load<Texture2D>("pecesParallax");
@@ -259,7 +262,7 @@ namespace Project1
             _spriteBatch.Draw(fishesParallax, new Rectangle((int)fishPosition2.X, (int)fishPosition2.Y, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
             _spriteBatch.Draw(backgroundLayer2, new Rectangle(0, -(int)cameraMono.position.Y / 10, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
 
-            elements.Render(_spriteBatch, pantallaRect, map.currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, clamClosedTexture, cameraMono);
+            elements.Render(_spriteBatch, pantallaRect, map.currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, clamClosedTexture, circle, cameraMono);
 
             // Draw a line in the cut
             if (isMousePressed)

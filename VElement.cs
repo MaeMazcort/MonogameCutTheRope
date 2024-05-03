@@ -139,7 +139,7 @@ namespace Project1
             }
         }
 
-        public void Render(SpriteBatch _spriteBatch, Rectangle pantallaRect, int currentLevel, Texture2D pearlTexture, Texture2D starTexture, Texture2D clamTexture, Texture2D startPointTexture, Texture2D clamClosedTexture, Camera cameraMono)
+        public void Render(SpriteBatch _spriteBatch, Rectangle pantallaRect, int currentLevel, Texture2D pearlTexture, Texture2D starTexture, Texture2D clamTexture, Texture2D startPointTexture, Texture2D clamClosedTexture, Texture2D circle, Camera cameraMono)
         {
             // Render ropes
 
@@ -164,12 +164,12 @@ namespace Project1
             }
 
             // Render pinnedPoints
-            
             for (int p = 0; p < pndPts.Count; p++)
             {
                 if (pndPts[p].Level == currentLevel)
                 {
                     _spriteBatch.Draw(startPointTexture, new Rectangle((int)pndPts[p].Pos.X - 10, (int)(pndPts[p].Pos.Y - 10 - cameraMono.position.Y), 20, 20), Color.White);
+                    _spriteBatch.Draw(circle, new Rectangle((int)pndPts[p].Pos.X - 70, (int)(pndPts[p].Pos.Y - 70 - cameraMono.position.Y), 140, 140), Color.White);
                     pndPts[p].RenderRadius(_spriteBatch);
                 }
             }
