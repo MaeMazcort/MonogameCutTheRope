@@ -2,14 +2,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System.Xml.Linq;
-using System;
 
 namespace Project1
 {
     public class VElement
     {
-        private int p, l;
+        private int p;
         public List<VptBase> pts;
         public List<StartVpt> strtPts;
         public List<CandyVpt> cndPts;
@@ -18,7 +16,6 @@ namespace Project1
         public List<VStk> stks;
         public List<Star> strs;
 
-        public Map map { get; set; }
         public List<WindInfluencer> Influencers { get; set; }
 
         public VElement()
@@ -34,15 +31,9 @@ namespace Project1
             Influencers = new List<WindInfluencer>();
         }
 
-        public List<VptBase> Pts => pts;
-        public List<StartVpt> startVpts => strtPts;
-        public List<CandyVpt> CandyVpts => cndPts;
-        public List<PinnedVpt> PinnedVpts => pndPts;
-        public List<Star> Stars => strs;
         public List<VRope> Rps => rps;
 
         public Clam clam { get; set; }
-        public Texture2D Texture { get; set; } // Unused?
         public int clamState;
 
         public void SetClam(Clam clam)
@@ -164,9 +155,8 @@ namespace Project1
                         new Rectangle((int)pndPts[p].Pos.X - 10, (int)(pndPts[p].Pos.Y - 10 - cameraMono.position.Y),
                             20, 20), Color.White);
                     _spriteBatch.Draw(circle,
-                        new Rectangle((int)pndPts[p].Pos.X - 70, (int)(pndPts[p].Pos.Y - 70 - cameraMono.position.Y),
-                            140, 140), Color.White);
-                    pndPts[p].RenderRadius(_spriteBatch);
+                        new Rectangle((int)pndPts[p].Pos.X - 100, (int)(pndPts[p].Pos.Y - 100 - cameraMono.position.Y),
+                            200, 200), Color.White);
                 }
             }
 
@@ -197,11 +187,11 @@ namespace Project1
             {
                 if (Influencers[i].Direction.X == 1)
                 {
-                    _spriteBatch.Draw(blowerright, new Rectangle((int)(Influencers[i].Position.X - 35), (int)(Influencers[i].Position.Y - 35 - cameraMono.position.Y), 70, 70), Color.White);
+                    _spriteBatch.Draw(blowerright, new Rectangle((int)(Influencers[i].Position.X - 40), (int)(Influencers[i].Position.Y - 40 - cameraMono.position.Y), 80, 80), Color.White);
                 }
                 else
                 {
-                    _spriteBatch.Draw(blowerleft, new Rectangle((int)(Influencers[i].Position.X - 35), (int)(Influencers[i].Position.Y - 35 - cameraMono.position.Y), 70, 70), Color.White);
+                    _spriteBatch.Draw(blowerleft, new Rectangle((int)(Influencers[i].Position.X - 40), (int)(Influencers[i].Position.Y - 40 - cameraMono.position.Y), 80, 80), Color.White);
 
                 }
             }

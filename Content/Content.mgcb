@@ -121,12 +121,14 @@
 /processorParam:Quality=Best
 /build:grabPoint.wav
 
+
 #begin MyFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:MyFont.spritefont
+
 
 #begin pecesParallax.png
 /importer:TextureImporter
@@ -175,6 +177,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:pezGlobo2.png
+
+#begin radio.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:radio.png
 
 #begin rocaArriba.png
 /importer:TextureImporter

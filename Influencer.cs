@@ -1,5 +1,3 @@
-using System.Drawing;
-
 namespace Project1;
 
 public abstract class Influencer
