@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Color = Microsoft.Xna.Framework.Color;
@@ -31,12 +32,15 @@ namespace Project1
 
         Rectangle pantallaRect;
 
+        private SpriteFont font;
+
         // Mouse
         Vector2 fishPosition, fishPosition2, bubblesPosition, bubblesPosition2;
         Vector2 startMousePosition; // Almacena la posición del mouse cuando se presiona el botón izquierdo
         private bool isMousePressed;
 
         bool levelfinished;
+        bool gameOver, gameWon;
 
         public Game1()
         {
@@ -129,6 +133,9 @@ namespace Project1
             fishPosition2 = new Vector2(parallaxWidth, 0);
             bubblesPosition = new Vector2(0, 0);
             bubblesPosition2 = new Vector2(0, parallaxHeight);
+            
+            //Fonts
+            font = Content.Load<SpriteFont>("MyFont");
 
         }
 
@@ -214,7 +221,6 @@ namespace Project1
                 fishPosition2.X = parallaxWidth;
             }
 
-
             levelfinished = LevelChangeDetections(clam);
             CheckLevelCompletion(levelfinished);
             // The else statement is in another part
@@ -223,7 +229,6 @@ namespace Project1
             ObtainStar();
 
             CheckGameState();
-
 
             base.Update(gameTime);
         }
@@ -238,7 +243,6 @@ namespace Project1
                 {
                     if (LineIntersects(stick.GetMidpoint(), startMousePosition, currentMousePosition, tolerance))
                     {
-
                         // Play sound
                         SoundManager.instCut.Pan = 1;
                         SoundManager.instCut.Volume = 1f;
@@ -297,6 +301,28 @@ namespace Project1
 
             //Check for intersection between CandyVpt and PinnedVpt radius
             RadiusIntersectionDetection(elements.pndPts);
+
+            //Draw "Game Over" message
+            if (gameOver)
+            {
+                string message = "Game Over";
+                Vector2 fontSize = font.MeasureString(message);
+                Vector2 position = new Vector2((GraphicsDevice.Viewport.Width - fontSize.X * 2) / 2, (GraphicsDevice.Viewport.Height - fontSize.Y * 2) / 2);  // Center the text
+                _spriteBatch.DrawString(font, message, position, Color.Red, 0, Vector2.Zero, 2.0f, SpriteEffects.None, 0);
+            }
+
+            // Draw "Game Won" message
+            if (gameWon)
+            {
+                string gameWonMessage = "Congratulations! You Won!";
+                Vector2 gameWonSize = font.MeasureString(gameWonMessage) * 2.0f; // Scale the text size by 2
+                Vector2 gameWonPosition = new Vector2((GraphicsDevice.Viewport.Width - gameWonSize.X) / 2, (GraphicsDevice.Viewport.Height - gameWonSize.Y) / 2);
+                _spriteBatch.DrawString(font, gameWonMessage, gameWonPosition, Color.Green, 0, Vector2.Zero, 2.0f, SpriteEffects.None, 0);
+            }
+
+            //Draw score
+            string scoreText = $"Score: {map.score}";
+            _spriteBatch.DrawString(font, scoreText, new Vector2(100, 100), Color.Black);
             
             _spriteBatch.End();
 
@@ -339,11 +365,11 @@ namespace Project1
                         SoundManager.instStar.Volume = 1f;
                         SoundManager.instStar.Play();
 
-                        map.score += 10; // Add points when the star is collected
+                        UpdateScore(10);
+                        Console.WriteLine("Star collected. Score : " + map.score);
                         collectedStars.Add(star);
                     }
                 }
-
             }
 
             // Remove the collected stars from the main list after checking all stars
@@ -363,15 +389,15 @@ namespace Project1
                     SoundManager.instEat.Pan = 1;
                     SoundManager.instEat.Volume = 1f;
                     SoundManager.instEat.Play();
-
-                    map.score += 100;
+                    
+                    UpdateScore(100);
+                    Console.WriteLine("Candy collected. Score : " + map.score);
                     if (currentLevel == 3)
                     {
-                        //GameWon();
+                        GameWon();
                     }
                     else
                     {
-
                         elements.cndPts.Remove(elements.cndPts[i]);
                         elements.DeleteClam();
                     }
@@ -381,32 +407,31 @@ namespace Project1
             return false;
         }
 
-
-        public bool CheckCandyVptCollisionWithFloor()
+        private void UpdateScore(int pointsToAdd)
         {
-            // Loop through all elements to find CandyVpt
-            for (int i = 0; i < elements.cndPts.Count; i++)
+            map.score += pointsToAdd;
+            Console.WriteLine($"Score updated: {map.score}");
+        }
+        
+        public bool IsCandyLost(Camera cameraMono)
+        {
+            // Check if any candy has fallen below the camera's position.
+            foreach (var candy in elements.cndPts)
             {
-                // Calculate the tile coordinates for the candy
-                int tileX = (int)(elements.cndPts[i].Pos.X / map.nTileWidth);
-                int tileY = (int)(elements.cndPts[i].Pos.Y / map.nTileHeight) + 1;  // Check the tile directly below the candy
-
-                // Check if the tile below the candy is a floor ('#')
-                if (tileY < map.nLevelHeight && map.GetTile(tileX, tileY) == '#')
+                // Check if the Y coordinate of the candy is greater than the Y coordinate of the camera.
+                if (candy.Pos.Y > cameraMono.position.Y +  GraphicsDevice.Viewport.Height - 20) 
                 {
-                    return true;  // Collision with floor detected
+                    return true;
                 }
             }
-
-            return false;  // No collision detected
+            return false;
         }
-
-
+        
         public void CheckGameState()
         {
-            if (CheckCandyVptCollisionWithFloor())
+            if (IsCandyLost(cameraMono))
             {
-                //GameOver();
+                GameOver();
             }
         }
 
@@ -417,21 +442,22 @@ namespace Project1
                 currentLevel++;
                 if (currentLevel > 3)
                 {
-                    currentLevel = 1;  // Loop back to the first level or handle the game completion
+                    currentLevel = 1;  // Loop back to the first level or handle the game completion 
                 }
                 Init();  // Re-initialize game state for the new level
             }
         }
-
-
-        /*
+        
         public void GameOver()
         {
-            TIMER.Stop(); // Stop the timer first
-            MessageBox.Show("You lost! You've lost the candy.", "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();  // Closes the form and ends the application
+            gameOver = true;
+            Console.WriteLine(gameOver);
         }
-        */
 
+        public void GameWon()
+        {
+            gameWon = true;
+            Console.WriteLine(gameWon);
+        }
     }
 }

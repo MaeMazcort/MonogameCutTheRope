@@ -184,8 +184,8 @@ namespace Project1
                             break;
                         case 'I': //Influencer
                             var influencerPosition = new V2(x * nTileWidth, y * nTileHeight);
-                            float strength = 10;  
-                            float velocity = 5;  
+                            float strength = 60;  
+                            float velocity = 10;  
                             var windInfluencer = new WindInfluencer(influencerPosition, strength, velocity, size);
                             elements.AddInfluencer(windInfluencer);
                             break;
