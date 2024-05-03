@@ -14,7 +14,7 @@ namespace Project1
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        Texture2D clamClosedTexture, pearlTexture, clamTexture, starTexture, startPointTexture, circle;
+        Texture2D clamClosedTexture, pearlTexture, clamTexture, starTexture, startPointTexture, circle, blowFishRight, blowFishLeft;
         Texture2D backgroundLayer1, bubblesParralax, fishesParallax, backgroundLayer2;
 
         public Map map;
@@ -90,6 +90,8 @@ namespace Project1
             starTexture = Content.Load<Texture2D>("estrella");
             startPointTexture = Content.Load<Texture2D>("startVpt");
             circle = Content.Load<Texture2D>("circulo");
+            blowFishLeft = Content.Load<Texture2D>("pezGlobo2");
+            blowFishRight = Content.Load<Texture2D>("pezGlobo");
 
             backgroundLayer1 = Content.Load<Texture2D>("fondo0");
             backgroundLayer2 = Content.Load<Texture2D>("rocaArriba");
