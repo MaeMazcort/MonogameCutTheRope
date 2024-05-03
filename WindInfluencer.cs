@@ -52,4 +52,14 @@ public class WindInfluencer : Influencer
     {
         IsActive = active;
     }
+
+    public void Deactivate()
+    {
+        IsActive = false;
+    }
+    
+    public void Activate()
+    {
+        IsActive = true;
+    }
 }
