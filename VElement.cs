@@ -99,10 +99,7 @@ namespace Project1
             // Update ropes
             for (p = 0; p < rps.Count; p++)
             {
-                if (rps[p].Level == 1)
-                {
-                    rps[p].Update(space);
-                }
+                rps[p].Update(space);
             }
         }
 

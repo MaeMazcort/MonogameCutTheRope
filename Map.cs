@@ -66,7 +66,7 @@ namespace Project1
             sLevel += ".....................";
             sLevel += ".....................";
             sLevel += "..........S..........";
-            sLevel += "..........M.........."; // 20
+            sLevel += "..........M.........."; // 30
 
             sLevel1 = ".....................";
             sLevel1 += "..........1..........";
@@ -97,7 +97,7 @@ namespace Project1
             sLevel1 += ".....................";
             sLevel1 += ".....................";
             sLevel1 += "..........S..........";
-            sLevel1 += "..........M.........."; // 20
+            sLevel1 += "..........M.........."; // 30
 
             sLevel2 = ".....................";
             sLevel2 += ".................1...";
@@ -128,7 +128,7 @@ namespace Project1
             sLevel2 += ".....................";
             sLevel2 += ".....................";
             sLevel2 += "..........S..........";
-            sLevel2 += "..........M.........."; // 20
+            sLevel2 += "..........M.........."; // 30
         }
 
         public void Draw(Rectangle size, ref CandyVpt candy, ref VElement elements, ref Clam clam, Texture2D perlaTexture, Texture2D estrellaTexture, Texture2D almejaTexture, int currentLevel)
@@ -156,8 +156,6 @@ namespace Project1
                     int index = y * nLevelWidth + x;
                     if (l[index] == 'A')
                     {
-                        Vector2 posicion = new Vector2(x * nTileWidth, y * nTileHeight);
-
                         candy = new CandyVpt(x * nTileWidth, y * nTileHeight, id, currentLevel, perlaTexture);
                         elements.AddPoint(candy);
                         elements.AddCandyPoint(candy);

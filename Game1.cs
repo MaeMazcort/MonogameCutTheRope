@@ -23,11 +23,9 @@ namespace Project1
         Clam clam;
         public Camera cameraMono;
 
-        private List<Vector2> slicePoints = new List<Vector2>();
-        public int r, w, h, currentLevel = 1;
+        public int w, h, currentLevel = 1;
         private float fishSpeed = 0.5f;
         private float bubbleSpeed = 0.5f;
-        private bool allowRendering;
 
         Rectangle pantallaRect;
 
@@ -53,6 +51,7 @@ namespace Project1
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            map = new Map();
         }
 
         private void Init()
@@ -62,14 +61,24 @@ namespace Project1
             elements = new VElement();
 
             map = new Map();
-            currentLevel = 1;
             map.Draw(pantallaRect, ref candy, ref elements, ref clam, pearlTexture, starTexture, clamTexture, currentLevel);
-
-            r = 0;
-            levelfinished = false;
-            allowRendering = true;
+            SetupRopes();
         }
 
+        private void SetupRopes()
+        {
+            if (elements.cndPts.Count > 0 && elements.strtPts.Count > 0)
+            {
+                foreach (var startPoint in elements.strtPts)
+                {
+                    if (startPoint.Level == candy.Level)
+                    {
+                        VRope rope = new VRope(startPoint, candy, 6, currentLevel);
+                        elements.AddRope(rope);
+                    }
+                }
+            }
+        }
 
         protected override void Initialize()
         {
@@ -158,11 +167,6 @@ namespace Project1
 
 
             levelfinished = LevelChangeDetections(clam);
-            if (levelfinished)
-            {
-                r = 0;
-                allowRendering = false;  // Stop rendering until the timer elapses
-            }
             CheckLevelCompletion(levelfinished);
             // The else statement is in another part
 
@@ -255,30 +259,6 @@ namespace Project1
 
             //Check for intersection between CandyVpt and PinnedVpt radius
             RadiusIntersectionDetection(elements.pndPts);
-
-            // Render ropes
-            if (!levelfinished && allowRendering)
-            {
-                if (r == 0)
-                {
-                    if (elements.cndPts.Count > 0)
-                    {
-                        for (int i = 0; i < elements.cndPts.Count; i++)
-                        {
-                            for (int j = 0; j < elements.strtPts.Count; j++)
-                            {
-                                if (elements.strtPts[j].Level == elements.cndPts[i].Level)
-                                {
-                                    VRope rope = new VRope(elements.strtPts[j], elements.cndPts[i], 6,
-                                    elements.strtPts[j].Level);
-                                    elements.AddRope(rope);
-                                }
-                            }
-                        }
-                    }
-                    r++;
-                }
-            }
             
             _spriteBatch.End();
 
