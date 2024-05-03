@@ -182,9 +182,18 @@ namespace Project1
 
         public bool LineIntersects(Vector2 point, Vector2 lineStart, Vector2 lineEnd, float radius)
         {
-            Vector2 closest = ClosestPointOnLine(lineStart, lineEnd, point);
-            return Vector2.DistanceSquared(closest, point) <= radius * radius;
+            if (Vector2.Distance(lineStart, lineEnd) == 0) return false;  
+
+            Vector2 lineVector = lineEnd - lineStart;
+            Vector2 pointVector = point - lineStart;
+
+            float projection = Vector2.Dot(pointVector, lineVector) / lineVector.LengthSquared();
+            if (projection < 0 || projection > 1) return false;  
+
+            Vector2 nearestPoint = lineStart + projection * lineVector;
+            return Vector2.Distance(nearestPoint, point) <= radius;
         }
+
 
 
 
