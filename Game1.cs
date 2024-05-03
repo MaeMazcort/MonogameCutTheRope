@@ -14,11 +14,7 @@ namespace Project1
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-
-        Texture2D ballTexture; // Ball
         Texture2D pearlTexture, clamTexture,starTexture, startPointTexture, backgroundLayer1, bubblesParralax, fishesParallax, backgroundLayer2;
-        Vector2 ballPosition; // Position
-        float ballSpeed; // Speed
 
         public Map map;
         CandyVpt candy;
@@ -27,17 +23,15 @@ namespace Project1
         public Camera cameraMono;
 
         private List<Vector2> slicePoints = new List<Vector2>();
-        //private Point mouseStart, mouseEnd;
-        private int checklevel;
-        public int r;
+        public int r, w, h;
+        private float fishSpeed = 0.5f;
+        private float bubbleSpeed = 0.5f;
         private bool allowRendering = true;
-
-        Vector2 mouseEnd;
 
         Rectangle pantallaRect;
 
         // Mouse
-        MouseState mouseState;
+        Vector2 fishPosition, bubblesPosition;
         Vector2 startMousePosition; // Almacena la posición del mouse cuando se presiona el botón izquierdo
         private bool isMousePressed;
 
@@ -48,8 +42,8 @@ namespace Project1
             _graphics = new GraphicsDeviceManager(this);
             _graphics.IsFullScreen = true;
 
-            int w = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            int h = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            w = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            h = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             int div = 1;
 
             _graphics.PreferredBackBufferWidth = w / div;
@@ -70,7 +64,6 @@ namespace Project1
             map = new Map(pantallaRect, ref candy, ref elements, ref clam, pearlTexture, starTexture, clamTexture);
             map.currentLevel = 1;
 
-            checklevel = 0;
             r = 0;
             levelfinished = false;
         }
@@ -96,6 +89,9 @@ namespace Project1
             backgroundLayer2 = Content.Load<Texture2D>("rocaArriba");
             fishesParallax = Content.Load<Texture2D>("pecesParallax");
             bubblesParralax = Content.Load<Texture2D>("burbujasParallax");
+
+            fishPosition = new Vector2(0, 0);
+            bubblesPosition = new Vector2(0, 0);
         }
 
         protected override void Update(GameTime gameTime)
@@ -143,6 +139,20 @@ namespace Project1
             elements.Update(pantallaRect);
             cameraMono.Follow(candy.Pos, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             cameraMono.ClampToArea(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height * 3, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+            //PARALAX
+            //fishPosition.X -= fishSpeed;
+            bubblesPosition.Y -= bubbleSpeed;
+            // Si las nubes se salen del lado derecho de la pantalla, reaparécelos en el lado izquierdo
+            if (fishPosition.X < w)
+            {
+                fishPosition.X = w; // Ajusta la posición utilizando el módulo
+            }
+            if (bubblesPosition.Y > h)
+            {
+                bubblesPosition.Y = -h; // Ajusta la posición utilizando el módulo
+            }
+
 
             //levelfinished = LevelChangeDetections(scene.Elements[0].clam);
             if (levelfinished)
@@ -226,9 +236,9 @@ namespace Project1
 
             // Parallax
             _spriteBatch.Draw(backgroundLayer1, new Rectangle(0, -(int)cameraMono.position.Y / 10, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
-            _spriteBatch.Draw(bubblesParralax, new Rectangle(0, -(int)cameraMono.position.Y / 10, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
-            _spriteBatch.Draw(fishesParallax, new Rectangle(-(int)cameraMono.position.Y / 10, 0, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
-            //_spriteBatch.Draw(backgroundLayer2, new Rectangle(0, -(int)cameraMono.position.Y / 10, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
+            _spriteBatch.Draw(bubblesParralax, new Rectangle((int)bubblesPosition.X, (int)bubblesPosition.Y, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
+            _spriteBatch.Draw(fishesParallax, new Rectangle((int)fishPosition.Y, 0, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
+            _spriteBatch.Draw(backgroundLayer2, new Rectangle(0, -(int)cameraMono.position.Y / 10, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
 
             elements.Render(_spriteBatch, pantallaRect, map.currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, cameraMono);
 
