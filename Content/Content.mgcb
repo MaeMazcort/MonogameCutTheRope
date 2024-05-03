@@ -79,6 +79,18 @@
 /processorParam:TextureFormat=Color
 /build:circulo.png
 
+#begin cut.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:cut.wav
+
+#begin eat.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:eat.wav
+
 #begin estrella.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -102,6 +114,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:fondo0.png
+
+#begin grabPoint.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:grabPoint.wav
 
 #begin Inter.fx
 /importer:EffectImporter
@@ -168,6 +186,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:rocaArriba.png
+
+#begin star.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:star.wav
 
 #begin startVpt.png
 /importer:TextureImporter
