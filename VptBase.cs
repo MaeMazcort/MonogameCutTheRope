@@ -23,7 +23,7 @@ namespace Project1
         public float mass;
         public V2 old, vel, g;
         public VptBase p1, p2;
-        public float r, d, mag, frict = 0.97f;
+        public float r, d, mag, frict = 1f;
 
         public V2 Pos { get; set; }
         public int Level { get; set; }
