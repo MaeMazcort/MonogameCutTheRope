@@ -44,7 +44,7 @@ namespace Project1
             sLevel += "..........A..........";
             sLevel += ".....................";
             sLevel += ".....................";
-            sLevel += "......1..............";
+            sLevel += "....I.1..............";
             sLevel += ".....................";
             sLevel += "..................S.."; // 10
             sLevel += ".....................";
@@ -195,10 +195,11 @@ namespace Project1
                             break;
                         case 'I': //Influencer
                             var influencerPosition = new V2(x * nTileWidth, y * nTileHeight);
-                            float strength = 10;  
+                            float strength = 40;  
                             float velocity = 5;  
                             var windInfluencer = new WindInfluencer(influencerPosition, strength, velocity,size);
-                           elements.AddInfluencer(windInfluencer);
+                            elements.AddInfluencer(windInfluencer);
+                            windInfluencer.Activate();
                             break;
                     }
                 }
