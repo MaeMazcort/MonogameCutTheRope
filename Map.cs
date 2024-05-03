@@ -21,7 +21,6 @@ namespace Project1
         public float stepX, stepY;
         public int id;
         public int score;
-        public int currentLevel;
         public float fOffsetX;
         public float fOffsetY;
         public float nVisibleTilesX;
@@ -31,21 +30,21 @@ namespace Project1
         public int nLevelWidth = 21;
         public int nLevelHeight = 30;
         public int nTileWidth, nTileHeight;
-        string sLevel;
+        string sLevel, sLevel1, sLevel2, l;
 
 
-        public Map(Rectangle size, ref CandyVpt candy, ref VElement elements, ref Clam clam, Texture2D perlaTexture, Texture2D estrellaTexture, Texture2D almejaTexture)
+        public Map()
         {
             score = 0;
 
-            sLevel  = ".....................";
+            sLevel = ".....................";
             sLevel += "..........1......1...";
             sLevel += ".....................";
             sLevel += ".....................";
             sLevel += "..........A..........";
             sLevel += ".....................";
             sLevel += ".....................";
-            sLevel += "......1..............";
+            sLevel += "....I.1..............";
             sLevel += ".....................";
             sLevel += "..................S.."; // 10
             sLevel += ".....................";
@@ -67,7 +66,85 @@ namespace Project1
             sLevel += ".....................";
             sLevel += ".....................";
             sLevel += "..........S..........";
-            sLevel += "..........M.........."; // 20
+            sLevel += "..........M.........."; // 30
+
+            sLevel1 = ".....................";
+            sLevel1 += "..........1..........";
+            sLevel1 += ".....................";
+            sLevel1 += ".....................";
+            sLevel1 += "..........A..........";
+            sLevel1 += ".....................";
+            sLevel1 += ".....................";
+            sLevel1 += ".....................";
+            sLevel1 += ".....................";
+            sLevel1 += "..................S.."; // 10
+            sLevel1 += ".....................";
+            sLevel1 += ".....................";
+            sLevel1 += "................S....";
+            sLevel1 += ".....................";
+            sLevel1 += ".....................";
+            sLevel1 += "................P....";
+            sLevel1 += ".....................";
+            sLevel1 += ".....................";
+            sLevel1 += "..............P......";
+            sLevel1 += "....................."; // 20
+            sLevel1 += ".....................";
+            sLevel1 += "............P........";
+            sLevel1 += ".....................";
+            sLevel1 += ".....................";
+            sLevel1 += "..........P..........";
+            sLevel1 += ".....................";
+            sLevel1 += ".....................";
+            sLevel1 += ".....................";
+            sLevel1 += "..........S..........";
+            sLevel1 += "..........M.........."; // 30
+
+            sLevel2 = ".....................";
+            sLevel2 += ".................1...";
+            sLevel2 += ".....................";
+            sLevel2 += ".....................";
+            sLevel2 += "..........A..........";
+            sLevel2 += ".....................";
+            sLevel2 += ".....................";
+            sLevel2 += ".....................";
+            sLevel2 += ".....................";
+            sLevel2 += "..................S.."; // 10
+            sLevel2 += ".....................";
+            sLevel2 += ".....................";
+            sLevel2 += "................S....";
+            sLevel2 += ".....................";
+            sLevel2 += ".....................";
+            sLevel2 += "................P....";
+            sLevel2 += ".....................";
+            sLevel2 += ".....................";
+            sLevel2 += "..............P......";
+            sLevel2 += "....................."; // 20
+            sLevel2 += ".....................";
+            sLevel2 += "............P........";
+            sLevel2 += ".....................";
+            sLevel2 += ".....................";
+            sLevel2 += "..........P..........";
+            sLevel2 += ".....................";
+            sLevel2 += ".....................";
+            sLevel2 += ".....................";
+            sLevel2 += "..........S..........";
+            sLevel2 += "..........M.........."; // 30
+        }
+
+        public void Draw(Rectangle size, ref CandyVpt candy, ref VElement elements, ref Clam clam, Texture2D perlaTexture, Texture2D estrellaTexture, Texture2D almejaTexture, int currentLevel)
+        {
+            switch (currentLevel)
+            {
+                case 1:
+                    l = sLevel;
+                    break;
+                case 2:
+                    l = sLevel1;
+                    break;
+                case 3:
+                    l = sLevel2;
+                    break;
+            }
 
             int nTileWidth = size.Width / nLevelWidth;
             int nTileHeight = size.Height / nLevelHeight;
@@ -77,11 +154,9 @@ namespace Project1
                 for (int x = 0; x < nLevelWidth; x++)
                 {
                     int index = y * nLevelWidth + x;
-                    if (sLevel[index] == 'A')
+                    if (l[index] == 'A')
                     {
-                        Vector2 posicion = new Vector2(x * nTileWidth, y * nTileHeight);
-
-                        candy = new CandyVpt(x * nTileWidth, y * nTileHeight, id, level: 1, perlaTexture);
+                        candy = new CandyVpt(x * nTileWidth, y * nTileHeight, id, currentLevel, perlaTexture);
                         elements.AddPoint(candy);
                         elements.AddCandyPoint(candy);
                         id++;
@@ -98,44 +173,36 @@ namespace Project1
                 for (int x = 0; x < nLevelWidth; x++)
                 {
                     int index = y * nLevelWidth + x;
-                    switch (sLevel[index])
+                    switch (l[index])
                     {
                         case '.':
                             break;
                         case 'S':
-                            var star1 = new Star(x * nTileWidth, y * nTileHeight, level: 1, estrellaTexture);
+                            var star1 = new Star(x * nTileWidth, y * nTileHeight, currentLevel, estrellaTexture);
                             elements.AddStar(star1);
                             break;
                         case '1':
-                            var startVpt1 = new StartVpt(x * nTileWidth, y * nTileHeight, id, level: 1);
+                            var startVpt1 = new StartVpt(x * nTileWidth, y * nTileHeight, id, currentLevel);
                             elements.AddPoint(startVpt1);
                             elements.AddStartPoint(startVpt1);
                             id++;
                             break;
                         case 'P':
-                            var pinnedpoint = new PinnedVpt(x * nTileWidth, y * nTileHeight, id, 140, true, level: 1);
+                            var pinnedpoint = new PinnedVpt(x * nTileWidth, y * nTileHeight, id, 140, true, currentLevel);
                             elements.AddPoint(pinnedpoint);
                             elements.AddPinnedPoint(pinnedpoint);
                             id++;
                             break;
                         case 'I': //Influencer
                             var influencerPosition = new V2(x * nTileWidth, y * nTileHeight);
-                            float strength = 10;  
+                            float strength = 40;  
                             float velocity = 5;  
                             var windInfluencer = new WindInfluencer(influencerPosition, strength, velocity,size);
-                           elements.AddInfluencer(windInfluencer);
+                            elements.AddInfluencer(windInfluencer);
+                            windInfluencer.Activate();
                             break;
                     }
                 }
-            }
-        }
-
-        public void SetTile(float x, float y, char c)
-        {
-            if (x >= 0 && x < nLevelWidth && y >= 0 && y < nLevelHeight)
-            {
-                int index = (int)y * nLevelWidth + (int)x;
-                sLevel = sLevel.Remove(index, 1).Insert(index, c.ToString());
             }
         }
 
