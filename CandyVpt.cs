@@ -1,4 +1,5 @@
 ﻿// Status: Completed. Check Texture instead of Image
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
@@ -17,9 +18,12 @@ namespace Project1
         }
 
 
-        public void Update(Rectangle space)
+        public void Update(GameTime gameTime)
         {
-            base.Update(space);
+            
+            Pos += vel * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            
         }
 
         public void ApplyForce(V2 force)

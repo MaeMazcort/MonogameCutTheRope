@@ -156,7 +156,7 @@ namespace Project1
 
             levelfinished = false;
 
-            elements.Update(pantallaRect);
+            elements.Update(pantallaRect, gameTime);
             cameraMono.Follow(candy.Pos, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             cameraMono.ClampToArea(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height * 3, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
@@ -229,24 +229,6 @@ namespace Project1
             Vector2 nearestPoint = lineStart + projection * lineVector;
             return Vector2.Distance(nearestPoint, point) <= radius;
         }
-
-
-
-
-        public Vector2 ClosestPointOnLine(Vector2 lineStart, Vector2 lineEnd, Vector2 point)
-        {
-            Vector2 AP = point - lineStart;       // Vector from lineStart to point
-            Vector2 AB = lineEnd - lineStart;     // Vector from lineStart to lineEnd
-            float abSquared = AB.LengthSquared(); // Distance squared from lineStart to lineEnd
-            if (abSquared == 0) return lineStart; // lineStart and lineEnd are the same point
-
-            float abDotAp = Vector2.Dot(AP, AB);  // Dot product of AP and AB
-            float t = abDotAp / abSquared;        // The normalized "distance" from lineStart to the closest point
-
-            t = MathHelper.Clamp(t, 0, 1);        // Clamp t to the range [0,1]
-            return lineStart + t * AB;            // Compute the closest point
-        }
-
 
         private Vector2 ConvertScreenToWorld(Vector2 screenPosition)
         {

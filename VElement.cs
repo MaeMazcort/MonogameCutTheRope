@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Xml.Linq;
+using System;
 
 namespace Project1
 {
@@ -88,7 +89,7 @@ namespace Project1
             Influencers.Add(influencer);
         }
 
-        public void Update(Rectangle space)
+        public void Update(Rectangle space, GameTime gameTime)
         {
             // Update points
             for (p = 0; p < pts.Count; p++)
@@ -114,12 +115,13 @@ namespace Project1
             {
                 foreach (var influencer in Influencers)
                 {
-                    V2 force = influencer.GetForce(pearl);
-                    pearl.ApplyForce(force);
+                    V2 windForce = influencer.GetForce(pearl);
+                    if (influencer.distance <= 200f)
+                    {
+                        pearl.ApplyForce(windForce);
+                        pearl.Update(gameTime);
+                    }
                 }
-                
-                // Update particle state
-                pearl.Update(space);
             }
         }
 
@@ -178,7 +180,7 @@ namespace Project1
             //Render influencers
             for (int i = 0; i < Influencers.Count; i++)
             {
-                _spriteBatch.Draw(starTexture, new Rectangle((int)(Influencers[i].Position.X-35), (int)(Influencers[i].Position.Y - 35 ), 70, 70), Color.White);
+                _spriteBatch.Draw(starTexture, new Rectangle((int)(Influencers[i].Position.X-35), (int)(Influencers[i].Position.Y - 35 - cameraMono.position.Y), 70, 70), Color.White);
             }
 
         }

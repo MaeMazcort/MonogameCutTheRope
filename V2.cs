@@ -59,6 +59,17 @@ namespace Project1
             return new V2(a.X / b, a.Y / b);
         }
 
+        public static V2 NormalizeVector(V2 vector)
+        {
+            float length = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+            if (length == 0)
+                return vector; // Return the original vector if it's a zero vector.
+
+            float x = vector.X / length;
+            float y = vector.Y / length;
+            return new V2(x, y);
+        }
+
         public float MagSqr()
         {
             return (X * X) + (Y * Y);
