@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using static System.Formats.Asn1.AsnWriter;
 using Color = Microsoft.Xna.Framework.Color;
@@ -23,10 +24,10 @@ namespace Project1
         public Camera cameraMono;
 
         private List<Vector2> slicePoints = new List<Vector2>();
-        public int r, w, h;
+        public int r, w, h, currentLevel = 1;
         private float fishSpeed = 0.5f;
         private float bubbleSpeed = 0.5f;
-        private bool allowRendering = true;
+        private bool allowRendering;
 
         Rectangle pantallaRect;
 
@@ -59,13 +60,14 @@ namespace Project1
             pantallaRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height * 3);
             cameraMono = new Camera(new V2(0, 0));
             elements = new VElement();
-            elements.SetMap(map);
 
-            map = new Map(pantallaRect, ref candy, ref elements, ref clam, pearlTexture, starTexture, clamTexture);
-            map.currentLevel = 1;
+            map = new Map();
+            currentLevel = 1;
+            map.Draw(pantallaRect, ref candy, ref elements, ref clam, pearlTexture, starTexture, clamTexture, currentLevel);
 
             r = 0;
             levelfinished = false;
+            allowRendering = true;
         }
 
 
@@ -155,12 +157,13 @@ namespace Project1
             }
 
 
-            //levelfinished = LevelChangeDetections(scene.Elements[0].clam);
+            levelfinished = LevelChangeDetections(clam);
             if (levelfinished)
             {
                 r = 0;
                 allowRendering = false;  // Stop rendering until the timer elapses
             }
+            CheckLevelCompletion(levelfinished);
             // The else statement is in another part
 
             // Check if the star is collected
@@ -168,7 +171,6 @@ namespace Project1
 
             CheckGameState();
 
-            LevelChangeDetections(clam);
 
             base.Update(gameTime);
         }
@@ -241,7 +243,7 @@ namespace Project1
             _spriteBatch.Draw(fishesParallax, new Rectangle((int)fishPosition.Y, 0, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
             _spriteBatch.Draw(backgroundLayer2, new Rectangle(0, -(int)cameraMono.position.Y / 10, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
 
-            elements.Render(_spriteBatch, pantallaRect, map.currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, clamClosedTexture, cameraMono);
+            elements.Render(_spriteBatch, pantallaRect, currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, clamClosedTexture, cameraMono);
 
             // Draw a line in the cut
             if (isMousePressed)
@@ -281,12 +283,6 @@ namespace Project1
             _spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        private float DistanceBetweenPoints(Vector2 point1, Vector2 point2)
-        {
-            // Calculate the Euclidean distance between two points
-            return (float)Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
         }
 
         private void RadiusIntersectionDetection(List<PinnedVpt> pinnedVpts)
@@ -330,28 +326,27 @@ namespace Project1
             }
         }
 
-        public void LevelChangeDetections(Clam clam)
+        public bool LevelChangeDetections(Clam clam)
         {
             for (int i = 0; i < elements.cndPts.Count; i++)
             {
                 if (clam.AteCandy(elements.cndPts[i]))
                 {
                     map.score += 100;
-                    if (map.currentLevel == 3)
+                    if (currentLevel == 3)
                     {
                         //GameWon();
                     }
                     else
                     {
-                        Console.WriteLine("Level " + map.currentLevel + " completed!");
 
                         elements.cndPts.Remove(elements.cndPts[i]);
                         elements.DeleteClam();
-                        Console.WriteLine("\nLevel " + map.currentLevel + " started!");
                     }
-                    map.currentLevel++;
+                    return true;
                 }
             }
+            return false;
         }
 
 
@@ -382,6 +377,20 @@ namespace Project1
                 //GameOver();
             }
         }
+
+        public void CheckLevelCompletion(bool levelfinished)
+        {
+            if (levelfinished)
+            {
+                currentLevel++;
+                if (currentLevel > 3)
+                {
+                    currentLevel = 1;  // Loop back to the first level or handle the game completion
+                }
+                Init();  // Re-initialize game state for the new level
+            }
+        }
+
 
         /*
         public void GameOver()
