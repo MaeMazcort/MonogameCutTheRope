@@ -252,13 +252,6 @@ namespace Project1
 
             base.Draw(gameTime);
         }
-        
-
-
-        private void IntersectionDetection(List<VRope> ropes, Vector2 mousePosition)
-        {
-            //
-        }
 
         private float DistanceBetweenPoints(Vector2 point1, Vector2 point2)
         {
