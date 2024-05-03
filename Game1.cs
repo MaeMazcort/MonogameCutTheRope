@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using static System.Formats.Asn1.AsnWriter;
 using Color = Microsoft.Xna.Framework.Color;
@@ -14,7 +15,7 @@ namespace Project1
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        Texture2D clamClosedTexture, pearlTexture, clamTexture, starTexture, startPointTexture, circle;
+        Texture2D clamClosedTexture, pearlTexture, clamTexture, starTexture, startPointTexture, circle, blowFishRight, blowFishLeft;
         Texture2D backgroundLayer1, bubblesParralax, fishesParallax, backgroundLayer2;
 
         public Map map;
@@ -22,16 +23,13 @@ namespace Project1
         VElement elements;
         Clam clam;
         public Camera cameraMono;
-
-        private List<Vector2> slicePoints = new List<Vector2>();
-        public int r, w, h;
         private float fishSpeed = 1f;
         private float bubbleSpeed = 1f;
-        private bool allowRendering = true;
         int parallaxHeight = 1000;
         int parallaxWidth = 1400;
+        public int w, h, currentLevel = 1;
 
-    Rectangle pantallaRect;
+        Rectangle pantallaRect;
 
         // Mouse
         Vector2 fishPosition, fishPosition2, bubblesPosition, bubblesPosition2;
@@ -62,15 +60,26 @@ namespace Project1
             pantallaRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height * 3);
             cameraMono = new Camera(new V2(0, 0));
             elements = new VElement();
-            elements.SetMap(map);
 
-            map = new Map(pantallaRect, ref candy, ref elements, ref clam, pearlTexture, starTexture, clamTexture);
-            map.currentLevel = 1;
-
-            r = 0;
-            levelfinished = false;
+            map = new Map();
+            map.Draw(pantallaRect, ref candy, ref elements, ref clam, pearlTexture, starTexture, clamTexture, currentLevel);
+            SetupRopes();
         }
 
+        private void SetupRopes()
+        {
+            if (elements.cndPts.Count > 0 && elements.strtPts.Count > 0)
+            {
+                foreach (var startPoint in elements.strtPts)
+                {
+                    if (startPoint.Level == candy.Level)
+                    {
+                        VRope rope = new VRope(startPoint, candy, 6, currentLevel);
+                        elements.AddRope(rope);
+                    }
+                }
+            }
+        }
 
         protected override void Initialize()
         {
@@ -90,6 +99,8 @@ namespace Project1
             starTexture = Content.Load<Texture2D>("estrella");
             startPointTexture = Content.Load<Texture2D>("startVpt");
             circle = Content.Load<Texture2D>("circulo");
+            blowFishLeft = Content.Load<Texture2D>("pezGlobo2");
+            blowFishRight = Content.Load<Texture2D>("pezGlobo");
 
             backgroundLayer1 = Content.Load<Texture2D>("fondo0");
             backgroundLayer2 = Content.Load<Texture2D>("rocaArriba");
@@ -174,12 +185,8 @@ namespace Project1
             }
 
 
-            //levelfinished = LevelChangeDetections(scene.Elements[0].clam);
-            if (levelfinished)
-            {
-                r = 0;
-                allowRendering = false;  // Stop rendering until the timer elapses
-            }
+            levelfinished = LevelChangeDetections(clam);
+            CheckLevelCompletion(levelfinished);
             // The else statement is in another part
 
             // Check if the star is collected
@@ -187,7 +194,6 @@ namespace Project1
 
             CheckGameState();
 
-            LevelChangeDetections(clam);
 
             base.Update(gameTime);
         }
@@ -262,7 +268,7 @@ namespace Project1
             _spriteBatch.Draw(fishesParallax, new Rectangle((int)fishPosition2.X, (int)fishPosition2.Y, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
             _spriteBatch.Draw(backgroundLayer2, new Rectangle(0, -(int)cameraMono.position.Y / 10, GraphicsDevice.Viewport.Width, (int)(GraphicsDevice.Viewport.Height * 1.25f)), Color.White);
 
-            elements.Render(_spriteBatch, pantallaRect, map.currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, clamClosedTexture, circle, cameraMono);
+            elements.Render(_spriteBatch, pantallaRect, currentLevel, pearlTexture, starTexture, clamTexture, startPointTexture, clamClosedTexture, circle, cameraMono);
 
             // Draw a line in the cut
             if (isMousePressed)
@@ -274,40 +280,10 @@ namespace Project1
 
             //Check for intersection between CandyVpt and PinnedVpt radius
             RadiusIntersectionDetection(elements.pndPts);
-
-            // Render ropes
-            if (!levelfinished && allowRendering)
-            {
-                if (r == 0)
-                {
-                    if (elements.cndPts.Count > 0)
-                    {
-                        for (int i = 0; i < elements.cndPts.Count; i++)
-                        {
-                            for (int j = 0; j < elements.strtPts.Count; j++)
-                            {
-                                if (elements.strtPts[j].Level == elements.cndPts[i].Level)
-                                {
-                                    VRope rope = new VRope(elements.strtPts[j], elements.cndPts[i], 6,
-                                    elements.strtPts[j].Level);
-                                    elements.AddRope(rope);
-                                }
-                            }
-                        }
-                    }
-                    r++;
-                }
-            }
             
             _spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        private float DistanceBetweenPoints(Vector2 point1, Vector2 point2)
-        {
-            // Calculate the Euclidean distance between two points
-            return (float)Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
         }
 
         private void RadiusIntersectionDetection(List<PinnedVpt> pinnedVpts)
@@ -351,28 +327,27 @@ namespace Project1
             }
         }
 
-        public void LevelChangeDetections(Clam clam)
+        public bool LevelChangeDetections(Clam clam)
         {
             for (int i = 0; i < elements.cndPts.Count; i++)
             {
                 if (clam.AteCandy(elements.cndPts[i]))
                 {
                     map.score += 100;
-                    if (map.currentLevel == 3)
+                    if (currentLevel == 3)
                     {
                         //GameWon();
                     }
                     else
                     {
-                        Console.WriteLine("Level " + map.currentLevel + " completed!");
 
                         elements.cndPts.Remove(elements.cndPts[i]);
                         elements.DeleteClam();
-                        Console.WriteLine("\nLevel " + map.currentLevel + " started!");
                     }
-                    map.currentLevel++;
+                    return true;
                 }
             }
+            return false;
         }
 
 
@@ -403,6 +378,20 @@ namespace Project1
                 //GameOver();
             }
         }
+
+        public void CheckLevelCompletion(bool levelfinished)
+        {
+            if (levelfinished)
+            {
+                currentLevel++;
+                if (currentLevel > 3)
+                {
+                    currentLevel = 1;  // Loop back to the first level or handle the game completion
+                }
+                Init();  // Re-initialize game state for the new level
+            }
+        }
+
 
         /*
         public void GameOver()

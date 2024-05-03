@@ -1,14 +1,8 @@
 ﻿// Status: Completed. Check the logic for FillEllipse
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
-using System.Runtime.CompilerServices;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection.Emit;
 
 namespace Project1
 {

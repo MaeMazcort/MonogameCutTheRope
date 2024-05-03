@@ -1,15 +1,7 @@
 ﻿// Status: Completed. Check Render function and the cirle
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System.Linq;
-using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-using System.Reflection.Metadata;
-using Microsoft.Xna.Framework.Content;
 using System.Xml.Linq;
 
 namespace Project1
@@ -57,11 +49,6 @@ namespace Project1
             this.clam = clam;
             clamState = 1;
             this.clam.openMouth = false;
-        }
-
-        public void SetMap(Map map)
-        {
-            this.map = map;
         }
 
         public void DeleteClam()
@@ -119,10 +106,7 @@ namespace Project1
             // Update ropes
             for (p = 0; p < rps.Count; p++)
             {
-                if (rps[p].Level == 1)
-                {
-                    rps[p].Update(space);
-                }
+                rps[p].Update(space);
             }
             
             //Update influencers
@@ -201,10 +185,9 @@ namespace Project1
             // Render clam
             if (clamState == 1)
             {
-                if (this.clam.openMouth)
-                    _spriteBatch.Draw(clamTexture,
-                        new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30 - cameraMono.position.Y),
-                            70, 70), Color.White);
+
+                if (clam.openMouth)
+                    _spriteBatch.Draw(clamTexture, new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30 - cameraMono.position.Y), 70, 70), Color.White);
                 else
                     _spriteBatch.Draw(clamClosedTexture,
                         new Rectangle((int)(clam.Position.X - 35), (int)(clam.Position.Y - 30 - cameraMono.position.Y),
@@ -224,6 +207,17 @@ namespace Project1
                 _spriteBatch.DrawLine(influencerPos, lineEnd, Color.White, 2);
             }
             
+        }
+
+        public void ClearAllLists()
+        {
+            pts.Clear();        // Clears the list of VptBase points
+            strtPts.Clear();    // Clears the list of StartVpt points
+            cndPts.Clear();     // Clears the list of CandyVpt points
+            pndPts.Clear();     // Clears the list of PinnedVpt points
+            rps.Clear();        // Clears the list of VRope ropes
+            stks.Clear();       // Clears the list of VStk sticks
+            strs.Clear();       // Clears the list of Star stars
         }
     }
     
